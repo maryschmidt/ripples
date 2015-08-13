@@ -1,0 +1,15 @@
+!.keep
+*.DS_Store
+*.swo
+*.swp
+/.bundle
+/.env
+/.foreman
+/coverage/*
+/db/*.sqlite3
+/lib/assets
+/log/*
+/public/system
+/public/assets
+/tags
+/tmp/*
