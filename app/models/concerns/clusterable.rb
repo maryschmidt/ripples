@@ -18,7 +18,7 @@ module Clusterable
     # Hierarchical agglomerative clustering of a matrix
     def hac(matrix)
       # Set number of clusters (simplest cutoff method)
-      k = 0
+      k = 1
       # Set similarity threshold
       threshold = 0
 
@@ -79,11 +79,12 @@ module Clusterable
 
         new_length = clusters[k_1].length
         new_sum = Array.new(matrix[0].length, 0)
-        clusters[k_1].each do |note|
-          matrix[note].each_with_index do |ele, index|
+        clusters[k_1].each do |row|
+          matrix[row].each_with_index do |ele, index|
             new_sum[index] += ele
           end
         end
+        # new_sum = normalize_vector(new_sum)
 
         j.each_with_index do |active, index|
           if active == 1 && index != k_1
@@ -91,17 +92,23 @@ module Clusterable
 
             comp_length = clusters[index].length
             comp_sum = Array.new(matrix[0].length, 0)
-            clusters[index].each_with_index do |ele, index|
-              comp_sum[index] += ele
+            clusters[index].each do |row|
+                matrix[row].each_with_index do |ele, c_index|
+                  comp_sum[c_index] += ele
+                end
             end
 
             sum_length = new_length + comp_length
             sum_vectors = Array.new(matrix[0].length, 0)
-            new_sum.each_with_index do |ele, index|
-              sum_vectors[index] += ele + comp_sum[index]
+            new_sum.each_with_index do |ele, s_index|
+              sum_vectors[s_index] = ele + comp_sum[s_index]
             end
 
-            new_c = (1/(sum_length * (sum_length - 1))) * (dotproduct(sum_vectors, sum_vectors) - sum_length)
+            new_c = (1.0/(sum_length * (sum_length - 1))) * (dotproduct(sum_vectors, sum_vectors) - sum_length)
+
+            if new_c > 1
+              puts new_c
+            end
 
             p[k_1].push([new_c, index])
             p[index].push([new_c, k_1])
@@ -148,15 +155,55 @@ module Clusterable
       return vect.map { |ele| ele = ele/euclength } 
     end
 
-    def build_tree(merge_list)
+    def build_tree(ref_hash, merge_list, threshold_interval)
+      # Initialize tree hash
       tree = Hash.new
-      merge_count = merge_list.length
 
-      merge_list.reverse_each do |merge|
+      # Build initial tree from reference hash of known format
+      ref_hash.each do |key, value|
+        tree_key = value['index']
+        tree_value = {'index' => tree_key, 'id' => key, 'name' => value['name'], 'size' => value['count']}
 
+        tree[tree_key] = tree_value
       end
 
-      return tree
+      threshold = 1.0 - threshold_interval
+
+      # Restructure tree hash based on merge_list
+      merge_list.each do |merge|
+        k_1 = merge[0]
+        k_2 = merge[1]
+        similarity = merge[2]
+
+        hash_1 = tree.delete(k_1)
+        hash_2 = tree.delete(k_2)
+
+        if similarity >= threshold
+          # Extract children if the exist
+          if hash_1.has_key?('children')
+            hash_1 = hash_1['children']
+          end
+
+          if hash_2.has_key?('children')
+            hash_2 = hash_2['children']
+          end
+
+          tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2].flatten(1)}
+        else
+          threshold = threshold - threshold_interval
+          tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2]}
+        end
+      end
+
+      values_array = tree.values
+
+      if values_array.length > 1
+        tree_result = {'id' => 'champs', 'index' => 0, 'children' => values_array}
+      else
+        tree_result = values_array
+      end
+
+      return tree_result
     end
   end
 end
