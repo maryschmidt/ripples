@@ -20,7 +20,7 @@ class Participant < ActiveRecord::Base
 
     items_ignored = 0
 
-    participant_subset = Participant.all.order(:id)
+    participant_subset = Participant.all.limit(100).order(:id)
     participant_subset.each do |participant|
       puts "hashes #{participant.id}"
       if !champ_hash.has_key?(participant.champion_id)
