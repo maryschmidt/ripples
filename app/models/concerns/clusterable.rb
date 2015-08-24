@@ -23,9 +23,9 @@ module Clusterable
       threshold = 0
 
       # Initialize arrays
-      c = Array.new(matrix.length) { Array.new(matrix.length) { Array.new(2, 0) } }
+      c = Array.new(matrix.length) { Array.new(matrix.length) { Array.new(2, 0.0) } }
       p = c
-      j = Array.new(matrix.length, 0)
+      j = Array.new(matrix.length, 0.0)
       a = Array.new()
       clusters = Array.new(matrix.length) { Array.new() }
 
@@ -78,7 +78,7 @@ module Clusterable
         p[k_1] = []
 
         new_length = clusters[k_1].length
-        new_sum = Array.new(matrix[0].length, 0)
+        new_sum = Array.new(matrix[0].length, 0.0)
         clusters[k_1].each do |row|
           matrix[row].each_with_index do |ele, index|
             new_sum[index] += ele
@@ -91,7 +91,7 @@ module Clusterable
             p[index].delete_if {|item| item[1] == k_1 || item[1] == k_2 }
 
             comp_length = clusters[index].length
-            comp_sum = Array.new(matrix[0].length, 0)
+            comp_sum = Array.new(matrix[0].length, 0.0)
             clusters[index].each do |row|
                 matrix[row].each_with_index do |ele, c_index|
                   comp_sum[c_index] += ele
@@ -99,7 +99,7 @@ module Clusterable
             end
 
             sum_length = new_length + comp_length
-            sum_vectors = Array.new(matrix[0].length, 0)
+            sum_vectors = Array.new(matrix[0].length, 0.0)
             new_sum.each_with_index do |ele, s_index|
               sum_vectors[s_index] = ele + comp_sum[s_index]
             end
@@ -122,7 +122,7 @@ module Clusterable
       # Prep outputs
       clusters.compact!
 
-      seeds = Array.new(clusters.length) { Array.new(matrix[0].length, 0) }
+      seeds = Array.new(clusters.length) { Array.new(matrix[0].length, 0.0) }
       clusters.each_with_index do |cluster, index|
         cluster.each do |note|
           matrix[note].each_with_index do |ele, e|
@@ -138,7 +138,7 @@ module Clusterable
 
     def dotproduct(vect1, vect2)
       size = vect1.length
-      sum = 0
+      sum = 0.0
       i = 0
       while i < size
         sum += vect1[i] * vect2[i]
@@ -148,11 +148,15 @@ module Clusterable
     end
 
     def normalize_vector(vect)
-      euclength_raw = 0
+      euclength_raw = 0.0
       vect.each { |ele| euclength_raw += ele**2 }
       euclength = Math.sqrt(euclength_raw)
 
-      return vect.map { |ele| ele = ele/euclength } 
+      if euclength <= 0.0
+        return vect
+      else
+        return vect.map { |ele| ele = ele/euclength } 
+      end
     end
 
     def build_tree(ref_hash, merge_list, threshold_interval)
