@@ -90,6 +90,7 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   background-color: darken($accent-green, 15);
   border: 2px solid lighten($accent-green, 5);
   color: lighten($accent-green, 75);
+  cursor: pointer;
   border-radius: $base-border-radius;
   display: inline-block;
   font-weight: 500;
@@ -98,6 +99,12 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   padding: .5em 2.25em;
   text-align: center;
   width: 120px;
+
+  &.red {
+    background-color: darken($accent-red, 15);
+    border: 2px solid lighten($accent-red, 5);
+    color: lighten($accent-red, 75);
+  }
 
   &.violet {
     background-color: darken($accent-violet, 15);
