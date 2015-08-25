@@ -14,6 +14,18 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= body_class %>">
+  <section class='header'>
+  <div class='header-wrapper'>
+    <%= link_to 'Ripples', root_path, class: 'logo' %>
+
+    <div class='nav-links'>
+      <%= link_to 'Results', root_path %>
+      <%= link_to 'About', page_path('about') %>
+      <%= link_to 'Contribute', '' %>
+    </div>
+  </div>
+  </section>
+
   <div class="wrapper">
     <%= render "flashes" -%>
     <%= yield %>

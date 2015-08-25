@@ -3,13 +3,115 @@ html, body {
   min-height: 100%;
 }
 
+.header {
+  background-color: $dark-background-color;
+  height: 80px;
+  padding: 10px;
+
+  .header-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+    width: 1000px;
+
+    .nav-links {
+      display: inline-block;
+      float: right;
+
+      a {
+        color: $accent-blue;
+        line-height: 60px;
+        margin-left: 0.85em;
+        font-weight: 500;
+
+        &:hover {
+          color: lighten($accent-blue, 15);
+        }
+      }
+    }
+  }
+
+  .logo {
+    color: $accent-blue;
+    display: inline-block;
+    line-height: calc(80px - 20px);
+    font-size: 1.35em;
+    font-weight: 500;
+    margin-right: 1em;
+
+    &:hover {
+      color: lighten($accent-blue, 15);
+    }
+  }
+}
+
 .wrapper {
   max-width: 100%;
   padding: 10px;
+
+  .data-wrapper {
+    width: 960px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
 }
 
-body.high_voltage-pages .wrapper {
+body.high_voltage-pages .wrapper, body.welcome .wrapper {
   background-color: $dark-background-color;
   color: $light-gray;
   min-height: 100%;
+}
+
+.static-wrapper {
+  width: 720px;
+  max-width: 100%;
+  margin: 0 auto;
+
+  h1 {
+    color: $accent-blue;
+    font-size: 1.5em;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-align: center;
+    margin-bottom: 1em;
+    margin-top: 0.5em;
+  }
+
+  p {
+    color: $accent-blue;
+    font-size: 1.15em;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 1em;
+    text-align: center;
+  }
+}
+
+.button {
+  background-color: darken($accent-green, 15);
+  border: 2px solid lighten($accent-green, 5);
+  color: lighten($accent-green, 75);
+  border-radius: $base-border-radius;
+  display: inline-block;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  margin: 1em 0.25em;
+  padding: .5em 2.25em;
+  text-align: center;
+  width: 120px;
+
+  &.violet {
+    background-color: darken($accent-violet, 15);
+    border: 2px solid lighten($accent-violet, 5);
+    color: lighten($accent-violet, 75);
+  }
+
+  &.orange {
+    background-color: darken($accent-orange, 15);
+    border: 2px solid lighten($accent-orange, 5);
+    color: lighten($accent-orange, 75);
+  }
+}
+
+.controls-container {
+  float: right;
 }

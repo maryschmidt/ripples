@@ -1,5 +1,3 @@
-HELLLOOOO
-
 <!-- <div><%= @test_variable_1 %></div> -->
 <!-- <div><%= @test_variable_2 %></div> -->
 <!-- <div><%= @test_variable_3 %></div> -->
@@ -16,9 +14,8 @@ body {
 }
 
 form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+  display: block;
+  margin-top: 4em;
 }
 
 svg {
@@ -27,10 +24,21 @@ svg {
 }
 
 </style>
-<form>
-  <label><input type="radio" name="mode" value="size"> Size</label>
-  <label><input type="radio" name="mode" value="count" checked> Count</label>
-</form>
+
+<div class='data-wrapper'>
+  HELLLOOOO
+
+  <div class='controls-container'>
+    <div class='button violet'>Size</div>
+    <div class='button orange'>Count</div>
+  </div>
+
+  <form>
+    <label><input type="radio" name="mode" value="size"> Size</label>
+    <label><input type="radio" name="mode" value="count" checked> Count</label>
+  </form>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
 <script>
@@ -41,7 +49,7 @@ var width = 960,
     radius = (Math.min(width, height) / 2) - 30,
     color = d3.scale.category20c();
 
-var svg = d3.select(".wrapper").append("svg")
+var svg = d3.select(".data-wrapper").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
