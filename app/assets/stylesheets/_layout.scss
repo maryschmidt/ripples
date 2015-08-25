@@ -79,10 +79,19 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   p {
     color: $accent-blue;
     font-size: 1.15em;
+    line-height: 1.35em;
     font-weight: 500;
     letter-spacing: 0.05em;
     margin-bottom: 1em;
     text-align: center;
+  }
+
+  a {
+    color: $accent-blue;
+    &:hover {
+      color: $accent-blue;
+      border-bottom: 1px solid lighten($accent-blue, 30);
+    }
   }
 }
 
