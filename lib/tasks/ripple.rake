@@ -1,6 +1,32 @@
 # require 'yajl'
 
 namespace :ripple do
+  desc "cluster number of participants from given server and patch"
+  task :cluster_participants, [:server, :patch, :count] => :environment do |t, args|
+    # rake ripple:cluster_participants['NA','5.11.0.270',1000]
+    # rake ripple:cluster_participants['NA','5.14.0.329',1000]
+
+    file = File.absolute_path("./lib/assets/clusters/#{args[:server]}_ranked_#{args[:patch]}_#{args[:count]}.json")
+    output = File.new(file, 'w+')
+
+    participants = Participant.includes(:match)
+      .where(
+        matches: {
+          region: args[:server],
+          match_version: args[:patch]
+        }
+      )
+      .references(:matches).limit(args[:count])
+
+    clustered_data = Participant.cluster_champs_by_build(participants, args[:count])
+
+    tree = clustered_data[5]
+
+    output.write(tree)
+
+    output.close
+  end
+
   desc "import matches from JSON"
   task :import_matches, [:server, :patch] => :environment do |t, args|
     # call it like this: rake ripple:import_matches[na,511]

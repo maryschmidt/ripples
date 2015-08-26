@@ -5,7 +5,7 @@ class Participant < ActiveRecord::Base
   belongs_to :match
 
   # Cluster champs by build
-  def self.cluster_champs_by_build
+  def self.cluster_champs_by_build(participants=Participant.all, count=100)
 
     # Look up appropriate participants
     # participants = Participant.where(match.region: region, match.match_version: patch)
@@ -20,7 +20,7 @@ class Participant < ActiveRecord::Base
 
     items_ignored = 0
 
-    participant_subset = Participant.all.limit(100).order(:id)
+    participant_subset = participants.limit(count).order(:id)
     participant_subset.each do |participant|
       puts "hashes #{participant.id}"
       if !champ_hash.has_key?(participant.champion_id)
