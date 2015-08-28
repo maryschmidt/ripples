@@ -27,19 +27,16 @@ svg {
 
 <div class='data-wrapper'>
   <div class='controls-container'>
-    <div class='button violet'>Size</div>
-    <div class='button red'>Count</div>
+    <div id='size' class='button violet'>Size</div>
+    <div id='count' class='button red'>Count</div>
   </div>
-
-  <form>
-    <label><input type="radio" name="mode" value="size"> Size</label>
-    <label><input type="radio" name="mode" value="count" checked> Count</label>
-  </form>
 
   <div class='window'></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
 <script>
 var root = <%= @test_json_2 %>;
@@ -47,7 +44,7 @@ var root = <%= @test_json_2 %>;
 var width = 960,
     height = 700,
     radius = (Math.min(width, height) / 2) - 30,
-    color = d3.scale.category20c();
+    color = ['#B01CEE', '#1CC3EE', '#1CEEB0', '#F6A110', '#EE1C5A'];
 
 var svg = d3.select(".data-wrapper").append("svg")
     .attr("width", width)
@@ -66,20 +63,20 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-  var path = svg.datum(root).selectAll("path")
-      .data(partition.nodes)
-    .enter().append("path")
-      .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-      .attr("d", arc)
-      .style("stroke", "#fff")
-      .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
-      .style("fill-rule", "evenodd")
-      .each(stash);
+var path = svg.datum(root).selectAll("path")
+  .data(partition.nodes)
+  .enter().append("path")
+  .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+  .attr("d", arc)
+  .style("stroke", "#fff")
+  .style("fill", function(d) { return color[(d.children ? d : d.parent).index % color.length]; })
+  .style("fill-rule", "evenodd")
+  .each(stash);
 
-      path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; })
+path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; })
 
-  d3.selectAll("input").on("change", function change() {
-    var value = this.value === "count"
+function change(sizing) {
+    var value = sizing === 'count'
         ? function() { return 1; }
         : function(d) { return d.size; };
 
@@ -88,7 +85,15 @@ var arc = d3.svg.arc()
       .transition()
         .duration(1500)
         .attrTween("d", arcTween);
-  });
+}
+
+$('#size.button').click(function () {
+  change('size');
+});
+
+$('#count.button').click(function () {
+  change('count');
+});
 
 // Stash the old values for transition.
 function stash(d) {
