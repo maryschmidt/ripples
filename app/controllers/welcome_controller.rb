@@ -1,5 +1,8 @@
 class WelcomeController < ApplicationController
-  def index
+  def results
+  end
+
+  def explore
     data = Participant.cluster_champs_by_build
     @test_variable_1 = data[0]
     @test_variable_2 = data[1]
