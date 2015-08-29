@@ -156,9 +156,16 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   width: 120px;
 
   &.red {
-    background-color: darken($accent-red, 15);
-    border: 2px solid lighten($accent-red, 5);
-    color: lighten($accent-red, 75);
+    background-color: darken($accent-red, 0);
+    border: 2px solid darken($accent-red, 10);
+    color: $light-gray;
+    &.lit {
+      -moz-box-shadow: 0 0 6px 2px lighten($accent-red, 15);
+      -webkit-box-shadow: 0 0 6px 2px lighten($accent-red, 15);
+      box-shadow: 0 0 6px 2px lighten($accent-red, 15);
+      background-color: darken($accent-red, 0);
+      border: 2px solid darken($accent-red, 10);
+    }
   }
 
   &.violet {
