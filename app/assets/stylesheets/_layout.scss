@@ -29,22 +29,37 @@ html, body {
 
           &:nth-child(1) {
             color: $accent-red;
+            &:hover {
+              text-shadow: 0 0 12px lighten($accent-red, 15);
+            }
           }
 
           &:nth-child(2) {
             color: $accent-orange;
+            &:hover {
+              text-shadow: 0 0 12px lighten($accent-orange, 15);
+            }
           }
 
           &:nth-child(3) {
             color: $accent-green;
+            &:hover {
+              text-shadow: 0 0 12px lighten($accent-green, 15);
+            }
           }
 
           &:nth-child(4) {
             color: $accent-blue;
+            &:hover {
+              text-shadow: 0 0 12px lighten($accent-blue, 15);
+            }
           }
 
           &:nth-child(5) {
             color: $accent-violet;
+            &:hover {
+              text-shadow: 0 0 12px lighten($accent-violet, 15);
+            }
           }
         }
       }
