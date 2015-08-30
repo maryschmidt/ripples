@@ -10,7 +10,13 @@ function Sunburst() {
 
   var root = data1;
 
-  var width = 960,
+  var $container = $('.data-vis');
+
+  // var width = $container.width(),
+  //     height = $container.height(),
+  //     radius = Math.min(width, height) / 2 - 20;
+
+  var width = 700,
     height = 700,
     radius = Math.min(width, height) / 2 - 20;
 
@@ -20,13 +26,16 @@ function Sunburst() {
   var y = d3.scale.sqrt()
     .range([0, radius]);
 
-  var color = ['#B01CEE', '#1CC3EE', '#1CEEB0', '#F6A110', '#EE1C5A'];
+  var color = d3.scale.ordinal()
+                .range(['#B01CEE', '#1CC3EE', '#1CEEB0', '#F6A110', '#EE1C5A']);
 
   var svg = d3.select(".data-vis").append("svg")
     .attr("width", width)
     .attr("height", height)
+    .attr("viewBox", "0 0 " + Math.min(width, height) + " " + Math.min(width, height))
+    .attr("preserveAspectRatio", "xMidYMid")
     .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
+    .attr("transform", "translate(" + (width / 2 - 0) + "," + (height / 2 + 10) + ")");
 
   var partition = d3.layout.partition()
     .sort(null)
@@ -44,13 +53,17 @@ function Sunburst() {
   var path = svg.selectAll("path")
     .data(partition.nodes(root))
     .enter().append("path")
-    .attr("opacity", function(d) { return d.depth ? 1 : 0; })
+    .attr("opacity", 0)
     .attr("d", arc)
-    .style("fill", function(d) { return color[(d.children ? d : d.parent).index % color.length ]; })
+    .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
     .on("click", click)
     .each(stash);
 
   path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
+
+  path.transition()
+    .duration(500)
+    .attr("opacity", function(d) { return d.depth ? 1 : 0; });
 
   function changeScaling(sizing) {
     var value = sizing  === 'count'
@@ -87,7 +100,7 @@ function Sunburst() {
           .enter().append("path")
           .attr("opacity", 0)
           .attr("d", arc)
-          .style("fill", function(d) { return color[(d.children ? d : d.parent).index % color.length ]; })
+          .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
           .on("click", click)
           .each(stash);
 
@@ -155,16 +168,6 @@ function Sunburst() {
       return i
         ? function(t) { return arc(d); }
       : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
-    };
-  }
-
-  function arcTweenUpdate(a) {
-    var i = d3.interpolate({x: this.x0, dx: this.dx0}, a);
-    return function(t) {
-      var b = i(t);
-      this.x0 = b.x;
-      this.dx0 = b.dx;
-      return arc(b);
     };
   }
 
