@@ -32,11 +32,37 @@ path {
 
 <div class='data-wrapper'>
   <div class='controls-container'>
-    <div id='size' data-slice='size' class='button violet scale'>Size</div>
-    <div id='count' data-slice='count' class='button red scale'>Count</div>
-    <div id='data1' data-data='data1' class='button violet data'>Data 1</div>
-    <div id='data2' data-data='data2' class='button red data'>Data 2</div>
+    <div class='row'>
+      <div class='dropdown green'>
+        <select class='region'>
+          <option id='na' value="na" data-region='na' selected>NA</option>
+          <option id='euw' value="euw" data-region='euw'>EUW</option>
+          <option id='eune' value="eune" data-region='eune'>EUNE</option>
+          <option id='kr' value="kr" data-region='kr'>KR</option>
+        </select>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='dropdown blue'>
+        <select class='data'>
+          <option id='data1' value="data1" data-data='data1'>Patch 5.11</option>
+          <option id='data2' value="data2" data-data='data2'>Patch 5.14</option>
+        </select>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='dropdown violet'>
+        <select class='scale'>
+          <option id='count' value="count" data-slice='count' selected>Count</option>
+          <option id='size' value="size" data-slice='size'>Size</option>
+        </select>
+      </div>
+    </div>
   </div>
+
+  <div class='data-vis'></div>
 
   <div class='window'></div>
 </div>
