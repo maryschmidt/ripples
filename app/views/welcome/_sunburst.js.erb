@@ -48,7 +48,7 @@ function Sunburst() {
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
   var tooltipDiv = d3.select(".data-vis").append("div")
-    .attr("class", "tooltip sunburst")
+    .attr("class", "tooltip sunburst hidden")
     .style("opacity", 0);
 
   // Keep track of the node that is currently being displayed as the root.
@@ -142,6 +142,7 @@ function Sunburst() {
       .duration(200)
       .style("opacity", 0.9);
     tooltipDiv.html("hi i'm a tooltip" + (d.id ? d.name : "cluster"))
+      .classed("hidden", false)
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 28) + "px");
   }
@@ -149,7 +150,8 @@ function Sunburst() {
   function hideTooltip(d) {
     tooltipDiv.transition()
       .duration(500)
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .each("end", function() { tooltipDiv.classed("hidden", true); });
   }
 
   d3.select(self.frameElement).style("height", height + "px");
