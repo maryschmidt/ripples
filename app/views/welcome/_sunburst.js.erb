@@ -141,7 +141,7 @@ function Sunburst() {
     tooltipDiv.transition()
       .duration(200)
       .style("opacity", 0.9);
-    tooltipDiv.html("hi i'm a tooltip" + (d.id ? d.name : "cluster"))
+    tooltipDiv.html( d.depth ? ("hi i'm a tooltip" + (d.id ? d.name : "cluster")) : ("WHY ARE YOU LOOKING AT ME?"))
       .classed("hidden", false)
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 28) + "px");
