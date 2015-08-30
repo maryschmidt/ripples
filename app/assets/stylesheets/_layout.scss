@@ -219,14 +219,26 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   border: 2px solid lighten($accent-violet, 5);
   color: lighten($accent-violet, 75);
 
+  &:hover {
+    background: darken($accent-violet, 10) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
+  }
+
   &.blue {
     background: darken($accent-blue, 15) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
     border: 2px solid lighten($accent-blue, 5);
+
+    &:hover {
+      background: darken($accent-blue, 10) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
+    }
   }
 
   &.green {
     background: darken($accent-green, 15) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
     border: 2px solid lighten($accent-green, 5);
+
+    &:hover {
+      background: darken($accent-green, 10) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
+    }
   }
 
   select {
