@@ -1,6 +1,15 @@
-$(document).ready(function() {
+$(document).ready(Sunburst());
 
-  var root = <%= @test_json_2 %>;
+function Sunburst() {
+  var data1 = <%= @test_json_1 %>;
+  var data2 = <%= @test_json_2 %>;
+  var datasets = {
+    data1: function() { return data1; },
+    data2: function() { return data2; }
+  };
+
+  var root = data1;
+
   var width = 960,
     height = 700,
     radius = Math.min(width, height) / 2 - 20;
@@ -32,9 +41,10 @@ $(document).ready(function() {
   // Keep track of the node that is currently being displayed as the root.
 
   var node = root;
-  var path = svg.datum(root).selectAll("path")
-    .data(partition.nodes)
+  var path = svg.selectAll("path")
+    .data(partition.nodes(root))
     .enter().append("path")
+    .attr("opacity", function(d) { return d.depth ? 1 : 0; })
     .attr("d", arc)
     .style("fill", function(d) { return color[(d.children ? d : d.parent).index % color.length ]; })
     .on("click", click)
@@ -42,25 +52,62 @@ $(document).ready(function() {
 
   path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
 
-  function change(sizing) {
+  function changeScaling(sizing) {
     var value = sizing  === 'count'
       ? function() { return 1; }
     : function(d) { return d.size; };
 
     path
-      .data(partition.value(value).nodes)
+      .data(partition.value(value).nodes(root))
       .transition()
       .duration(1000)
       .attrTween("d", arcTweenData);
   };
 
-  $('#size.button').click(function () {
-      change('size');
-  });
+  isChanging = false;
 
-  $('#count.button').click(function () {
-      change('count');
-  });
+  function changeData(dataset) {
+    if (!isChanging) {
+
+      isChanging = true;
+      timing = 150;
+
+      path
+        .transition()
+        .duration(timing)
+        .attr("opacity", 0)
+        .remove();
+
+      root = dataset;
+      node = root;
+
+      setTimeout(function() {
+        path = svg.selectAll("path")
+          .data(partition.nodes(root))
+          .enter().append("path")
+          .attr("opacity", 0)
+          .attr("d", arc)
+          .style("fill", function(d) { return color[(d.children ? d : d.parent).index % color.length ]; })
+          .on("click", click)
+          .each(stash);
+
+        path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
+
+        path
+          .transition()
+          .duration(timing)
+          .attr("opacity", function(d) { return d.depth ? 1 : 0; })
+
+        isChanging = false;
+      }, timing + 50);
+    }
+
+  };
+
+  $('.button.scale').click(function (e) { changeScaling(e.currentTarget.dataset.slice); });
+
+  $('.button.data').click(function (e) { changeData(datasets[e.currentTarget.dataset.data]()); });
+
 
   function click(d) {
     node = d;
@@ -111,4 +158,14 @@ $(document).ready(function() {
     };
   }
 
-});
+  function arcTweenUpdate(a) {
+    var i = d3.interpolate({x: this.x0, dx: this.dx0}, a);
+    return function(t) {
+      var b = i(t);
+      this.x0 = b.x;
+      this.dx0 = b.dx;
+      return arc(b);
+    };
+  }
+
+}
