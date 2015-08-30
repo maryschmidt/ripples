@@ -47,6 +47,10 @@ function Sunburst() {
     .innerRadius(function(d) { return Math.max(0, y(d.y)); })
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
+  var tooltipDiv = d3.select(".data-vis").append("div")
+    .attr("class", "tooltip sunburst")
+    .style("opacity", 0);
+
   // Keep track of the node that is currently being displayed as the root.
 
   var node = root;
@@ -57,9 +61,11 @@ function Sunburst() {
     .attr("d", arc)
     .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
     .on("click", click)
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip)
     .each(stash);
 
-  path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
+  // path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
 
   path.transition()
     .duration(500)
@@ -102,9 +108,11 @@ function Sunburst() {
           .attr("d", arc)
           .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
           .on("click", click)
+          .on("mouseover", showTooltip)
+          .on("mouseout", hideTooltip)
           .each(stash);
 
-        path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
+        // path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
 
         path
           .transition()
@@ -127,6 +135,21 @@ function Sunburst() {
     path.transition()
       .duration(1000)
       .attrTween("d", arcTweenZoom(d));
+  }
+
+  function showTooltip(d) {
+    tooltipDiv.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+    tooltipDiv.html("hi i'm a tooltip" + (d.id ? d.name : "cluster"))
+      .style("left", (d3.event.pageX) + "px")
+      .style("top", (d3.event.pageY - 28) + "px");
+  }
+
+  function hideTooltip(d) {
+    tooltipDiv.transition()
+      .duration(500)
+      .style("opacity", 0);
   }
 
   d3.select(self.frameElement).style("height", height + "px");
