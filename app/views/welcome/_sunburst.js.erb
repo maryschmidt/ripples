@@ -136,6 +136,38 @@ function Sunburst() {
     path.transition()
       .duration(1000)
       .attrTween("d", arcTweenZoom(d));
+    updateWindow(d);
+  }
+
+  function updateWindow(d) {
+    if (d.id) {
+      // champion selected
+      // create window html
+      championInnerHtml = "<div class='champion-portrait column'></div>\
+        <div class='items column'></div>"
+      $('.window').html(championInnerHtml);
+
+      // populate window html with data
+      // champion portrait and name
+      championPortraitHtml = "<img src=" + (championImage + d.image) + "> " + "<div class='name'>" + d.name + "</div>"
+      $('.window .champion-portrait').html(championPortraitHtml)
+
+      // champion items
+      championItemHtml = "<div class='heading'>Items</div>\
+        <img class='item' src=" + (itemImage + d.items[0]) + ">\
+        <img class='item' src=" + (itemImage + d.items[1]) + ">\
+        <img class='item' src=" + (itemImage + d.items[2]) + ">\
+        <img class='item' src=" + (itemImage + d.items[3]) + ">\
+        <img class='item' src=" + (itemImage + d.items[4]) + ">\
+        <img class='item' src=" + (itemImage + d.items[5]) + ">"
+      $('.window .items').html(championItemHtml)
+
+      // champion winrate
+
+    } else {
+      // cluster selected
+      console.log('cluster');
+    }
   }
 
   function showTooltip(d) {
