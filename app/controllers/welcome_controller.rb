@@ -1,5 +1,9 @@
 class WelcomeController < ApplicationController
   def results
+    data = Participant.compare_participant_subsets
+    @ap_items = data[2]
+    @ap_champs = data[3]
+    @diff_champs = data[4]
   end
 
   def explore
