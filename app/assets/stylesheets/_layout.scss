@@ -201,6 +201,12 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   width: 486px;
   max-width: 100%;
 
+  h2 {
+    text-align: center;
+    max-width: 368px;
+    color: $light-gray;
+  }
+
   .column {
     display: inline-block;
     vertical-align: middle;
