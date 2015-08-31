@@ -10,7 +10,7 @@ function Sunburst() {
 
   $('select.data').on('input', function (e) { changeData(datasets[e.currentTarget.selectedOptions[0].dataset.data]()); });
 
-  var root = data1;
+  var root = datasets.data1();
 
   var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
   var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
