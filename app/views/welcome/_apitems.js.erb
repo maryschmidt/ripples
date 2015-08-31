@@ -1,0 +1,135 @@
+$(document).ready(ApItems());
+
+function ApItems() {
+  var data = <%= @ap_items %>
+
+  var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
+  var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
+
+  var margin = {top: 40, right: 20, bottom: 70, left: 70},
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+  var x0 = d3.scale.ordinal()
+             .rangeRoundBands([0, width], .25);
+
+  var x1 = d3.scale.ordinal();
+
+  var y0 = d3.scale.linear()
+             .range([height, 0]);
+
+  var y1 = d3.scale.linear()
+             .range([height, 0]);
+
+  var color = d3.scale.ordinal()
+                .range(['#1CC3EE', '#EE1C5A']);
+
+  var xAxis = d3.svg.axis()
+                .scale(x0)
+                .orient("bottom")
+                .tickFormat('');
+
+  var y0Axis = d3.svg.axis()
+                 .scale(y0)
+                 .orient("left")
+                 .tickFormat(d3.format(".2s"));
+
+  var y1Axis = d3.svg.axis()
+                 .scale(y1)
+                 .orient("left")
+                 .tickFormat(d3.format("%"));
+
+  var svg = d3.select(".ap-items-viz").append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // data.forEach(function(d) {
+  //   d.counts = [{name: 'first', value: d.count1}, {name: 'second', value: d.count2}];
+  //   d.winrates = [{name: 'first', value: d.winrate1}, {name: 'second', value: d.winrate2}];
+  // });
+
+  x0.domain(data.map(function(d) { return d.name; }));
+  x1.domain(['first', 'second']).rangeRoundBands([0, x0.rangeBand()]);
+  y0.domain([0, d3.max(data, function(d) { return Math.max(d.count1, d.count2); })]);
+  y1.domain([0, d3.max(data, function(d) { return Math.max(d.winrate1, d.winrate2); })]);
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  svg.append("g")
+    .attr("class", "y axis count")
+    .call(y0Axis)
+    .append("text")
+    .attr("y", -25)
+    .attr("dy", ".71em")
+    .attr("dx", ".71em")
+    .style("text-anchor", "middle")
+    .style("fill", "#ededed")
+    .text("Games Played");
+
+  svg.append("g")
+    .attr("class", "y axis rate hidden")
+    .call(y1Axis)
+    .append("text")
+    .attr("y", -25)
+    .attr("dy", ".71em")
+    .attr("dx", ".71em")
+    .style("text-anchor", "middle")
+    .style("fill", "#ededed")
+    .text("Winrate");
+
+  var item = svg.selectAll(".item")
+    .data(data)
+    .enter().append("g")
+    .attr("class", "g")
+    .attr("transform", function(d) { return "translate(" + x0(d.name) + ",0)"; });
+
+  item.selectAll("rect")
+    .data(function(d) { return d.plotdata; })
+    .enter().append("rect")
+    .attr("width", x1.rangeBand())
+    .attr("x", function(d) { return x1(d.name); })
+    .attr("y", function(d) { return y0(d.cValue); })
+    .attr("height", function(d) { return height - y0(d.cValue); })
+    .style("fill", function(d) { return color(d.name); });
+
+  svg.select(".x.axis").selectAll("text").remove();
+
+  var ticks = svg.select(".x.axis").selectAll(".tick")
+                .data(data)
+                .append("svg:image")
+                .attr("xlink:href", function(d) { return itemImage + d.image; })
+                .attr("width", 30)
+                .attr("height", 30)
+                .attr("x", -15)
+                .attr("y", ".5em");
+
+  $('select.scale').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
+
+  function changeScaling(sizing) {
+    if (sizing == "count") {
+      item.selectAll("rect")
+        .transition()
+        .duration(500)
+        .attr("y", function(d) { return y0(d.cValue); })
+        .attr("height", function(d) { return height - y0(d.cValue); });
+
+      svg.select(".y.axis.count").classed("hidden", false);
+      svg.select(".y.axis.rate").classed("hidden", true);
+    } else {
+      item.selectAll("rect")
+        .transition()
+        .duration(500)
+        .attr("y", function(d) { return y1(d.wValue); })
+        .attr("height", function(d) { return height - y1(d.wValue); });
+
+      svg.select(".y.axis.count").classed("hidden", true);
+      svg.select(".y.axis.rate").classed("hidden", false);
+    }
+  };
+
+}

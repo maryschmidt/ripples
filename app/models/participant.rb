@@ -20,12 +20,14 @@ class Participant < ActiveRecord::Base
       if item_hash_1.has_key?(item) && item_hash_2.has_key?(item)
         key = item
         value = {
+          'id' => item,
           'name' => item_hash_1[item]['name'],
           'image' => item_hash_1[item]['image'],
           'count1' => item_hash_1[item]['count'],
           'count2' => item_hash_2[item]['count'],
+          'plotdata' => [{'name' => 'first', 'cValue' => item_hash_1[item]['count'], 'wValue' => (item_hash_1[item]['wins'] / item_hash_1[item]['count'].to_f)}, {'name' => 'second', 'cValue' => item_hash_2[item]['count'], 'wValue' => (item_hash_2[item]['wins'] / item_hash_2[item]['count'].to_f)}],
           'winrate1' => item_hash_1[item]['wins'] / item_hash_1[item]['count'].to_f,
-          'winrate2' => item_hash_2[item]['wins'] / item_hash_2[item]['count'].to_f
+          'winrate2' => item_hash_2[item]['wins'] / item_hash_2[item]['count'].to_f,
         }
         items_AP_hash[key] = value
       end
@@ -91,7 +93,7 @@ class Participant < ActiveRecord::Base
 
     return [ tree_1,
              tree_2,
-             items_AP_hash.to_json.html_safe,
+             items_AP_hash.values.to_json.html_safe,
              champs_AP_hash.to_json.html_safe,
              champs_delta_hash.to_json.html_safe,
              champ_hash_1.to_json.html_safe,
