@@ -3,6 +3,10 @@ html, body {
   min-height: 100%;
 }
 
+b {
+  font-weight: 600;
+}
+
 .header {
   background-color: $dark-background-color;
   height: 80px;
@@ -120,23 +124,59 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
     line-height: 36px;
     margin: 36px auto 36px auto;
     text-align: center;
+    &.red {
+      color: $accent-red;
+    }
+    &.orange {
+      color: $accent-orange;
+    }
+    &.green {
+      color: $accent-green;
+    }
+    &.blue {
+      color: $accent-blue;
+    }
+    &.violet {
+      color: $accent-violet;
+    }
+  }
+
+  h2 {
+    color: $accent-green;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 28px;
+    margin: 36px auto 18px auto;
   }
 
   p {
     color: $light-gray;
-    font-size: 1.15em;
-    line-height: 1.35em;
+    font-size: 1em;
     font-weight: 400;
-    letter-spacing: 0.05em;
+    line-height: 1.35em;
     margin-bottom: 1em;
-    text-align: center;
   }
 
   a {
-    color: $light-gray;
+    color: lighten($accent-violet, 30);
     &:hover {
-      color: $light-gray;
-      border-bottom: 1px solid lighten($light-gray, 30);
+      color: lighten($accent-violet, 30);
+      border-bottom: 1px solid lighten($accent-violet, 30);
+    }
+    &.blue {
+      color: lighten($accent-blue, 30);
+      &:hover {
+        color: lighten($accent-blue, 30);
+        border-bottom: 1px solid lighten($accent-blue, 30);
+      }
+    }
+    &.green {
+      color: lighten($accent-green, 30);
+      &:hover {
+        color: lighten($accent-green, 30);
+        border-bottom: 1px solid lighten($accent-green, 30);
+      }
     }
   }
 }
