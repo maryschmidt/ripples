@@ -84,13 +84,20 @@ b {
     margin: 0 auto;
 
     h1 {
-      color: $light-gray;
       font-size: 24px;
       font-weight: 400;
       letter-spacing: 0.02em;
       line-height: 36px;
       margin: 36px auto 36px auto;
       text-align: center;
+      &.red {
+        color: $accent-red;
+        text-shadow: 0 0 12px #f3638e;
+      }
+      &.orange {
+        color: $accent-orange;
+        text-shadow: 0 0 12px #f9be5a;
+      }
     }
 
     h2 {
@@ -132,12 +139,15 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
     }
     &.green {
       color: $accent-green;
+      text-shadow: 0 0 12px lighten($accent-green, 15);
     }
     &.blue {
       color: $accent-blue;
+      text-shadow: 0 0 12px lighten($accent-blue, 15);
     }
     &.violet {
       color: $accent-violet;
+      text-shadow: 0 0 12px lighten($accent-violet, 15);
     }
   }
 
