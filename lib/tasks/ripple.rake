@@ -51,11 +51,11 @@ namespace :ripple do
   end
 
   desc "cluster number of participants from given server and patch"
-  task :cluster_participants, [:server, :patch, :count] => :environment do |t, args|
-    # rake ripple:cluster_participants['NA','5.11.0.270',1000]
-    # rake ripple:cluster_participants['NA','5.14.0.329',1000]
+  task :cluster_participants, [:server, :patch] => :environment do |t, args|
+    # rake ripple:cluster_participants['NA','5.11.0.270']
+    # rake ripple:cluster_participants['NA','5.14.0.329']
 
-    file = File.absolute_path("./lib/assets/clusters/#{args[:server]}_ranked_#{args[:patch]}_#{args[:count]}.json")
+    file = File.absolute_path("./lib/assets/clusters/#{args[:server]}_ranked_#{args[:patch]}.json")
     output = File.new(file, 'w+')
 
     participants = Participant.includes(:match)
@@ -65,9 +65,9 @@ namespace :ripple do
           match_version: args[:patch]
         }
       )
-      .references(:matches).limit(args[:count])
+      .references(:matches)
 
-    clustered_data = Participant.cluster_champs_by_build(participants, args[:count])
+    clustered_data = Participant.cluster_champs_by_build(participants)
 
     tree = clustered_data[5]
 
