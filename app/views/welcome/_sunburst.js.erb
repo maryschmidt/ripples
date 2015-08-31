@@ -10,8 +10,9 @@ function Sunburst() {
 
   var root = data1;
 
-  var $container = $('.data-vis');
-
+  var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
+  var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
+  // var $container = $('.data-vis');
   // var width = $container.width(),
   //     height = $container.height(),
   //     radius = Math.min(width, height) / 2 - 20;
@@ -141,7 +142,7 @@ function Sunburst() {
     tooltipDiv.transition()
       .duration(200)
       .style("opacity", 0.9);
-    tooltipDiv.html( d.depth ? ("hi i'm a tooltip " + (d.id ? (d.name + " builds " + d.items) : ("cluster builds " + d.items))) : ("WHY ARE YOU LOOKING AT ME? " + d.items))
+    tooltipDiv.html( d.depth ? ((d.id ? ("<img src=" + (championImage + d.image) + "> " + d.name) : ("<img class='item' src=" + (itemImage + d.items[0]) + "> <img class='item' src=" + (itemImage + d.items[1]) + "> <img class='item' src=" + (itemImage + d.items[2]) + "> <img class='item' src=" + (itemImage + d.items[3]) + ">"))) : ("WHY ARE YOU LOOKING AT ME? " + "<img class='item' src=" + (itemImage + d.items[0]) + "> <img class='item' src=" + (itemImage + d.items[1]) + "> <img class='item' src=" + (itemImage + d.items[2]) + "> <img class='item' src=" + (itemImage + d.items[3]) + ">"))
       .classed("hidden", false)
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 28) + "px");
