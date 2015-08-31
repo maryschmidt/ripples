@@ -7,8 +7,8 @@ function ApItems() {
   var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
 
   var margin = {top: 40, right: 20, bottom: 70, left: 70},
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+      width = 840 - margin.left - margin.right,
+      height = 420 - margin.top - margin.bottom;
 
   var x0 = d3.scale.ordinal()
              .rangeRoundBands([0, width], .25);
@@ -107,6 +107,25 @@ function ApItems() {
                 .attr("height", 30)
                 .attr("x", -15)
                 .attr("y", ".5em");
+
+  var legend = svg.selectAll(".legend")
+    .data(['Patch 5.11', 'Patch 5.14'])
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + (i * 20 - 30) + ")"; });
+
+  legend.append("rect")
+    .attr("x", width - 18)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", function(d) { return color(d == 'Patch 5.11' ? 'first' : 'second'); });
+
+  legend.append("text")
+    .attr("x", width - 24)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "end")
+    .text(function(d) { return d; });
 
   $('select.scale').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
 
