@@ -1,6 +1,55 @@
-# require 'yajl'
-
 namespace :ripple do
+  desc "generate all the data ever"
+  task generate_global_comparisons: :environment do
+    # rake ripple:generate_global_comparisons
+
+    # 5.11 tree
+    participant_set_1 = Participant.includes(:match)
+      .where(
+        matches: {
+          match_version: '5.11.0.270'
+        }
+      )
+      .references(:matches)
+
+    participant_set_2 = Participant.includes(:match)
+      .where(
+        matches: {
+          match_version: '5.14.0.329'
+        }
+      )
+      .references(:matches)
+
+    data_set = Participant.compare_participant_subsets(participant_set_1, participant_set_2)
+
+    tree_511 = data_set[0]
+    tree_514 = data_set[1]
+    ap_items = data_set[2]
+    ap_champs = data_set[3]
+    champ_diffs = data_set[4]
+
+    # write output to files
+    file_0 = File.new(File.absolute_path("./lib/assets/comparisons/clusters_511_all.json"), 'w+')
+    file_0.write(tree_511)
+    file_0.close
+
+    file_1 = File.new(File.absolute_path("./lib/assets/comparisons/clusters_514_all.json"), 'w+')
+    file_1.write(tree_514)
+    file_1.close
+
+    file_2 = File.new(File.absolute_path("./lib/assets/comparisons/ap_items_all.json"), 'w+')
+    file_2.write(ap_items)
+    file_2.close
+
+    file_3 = File.new(File.absolute_path("./lib/assets/comparisons/ap_champs_all.json"), 'w+')
+    file_3.write(ap_champs)
+    file_3.close
+
+    file_4 = File.new(File.absolute_path("./lib/assets/comparisons/champ_diffs_all.json"), 'w+')
+    file_4.write(champ_diffs)
+    file_4.close
+  end
+
   desc "cluster number of participants from given server and patch"
   task :cluster_participants, [:server, :patch, :count] => :environment do |t, args|
     # rake ripple:cluster_participants['NA','5.11.0.270',1000]

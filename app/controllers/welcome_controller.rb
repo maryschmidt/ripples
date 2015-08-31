@@ -1,24 +1,12 @@
 class WelcomeController < ApplicationController
   def results
-    data = Participant.compare_participant_subsets
-    @ap_items = data[2]
-    @ap_champs = data[3]
-    @diff_champs = data[4]
+    @ap_items = File.read(File.absolute_path("lib/assets/comparisons/ap_items_all.json")).html_safe
+    @ap_champs = File.read(File.absolute_path("lib/assets/comparisons/ap_champs_all.json")).html_safe
+    @champ_diffs = File.read(File.absolute_path("lib/assets/comparisons/champ_diffs_all.json")).html_safe
   end
 
   def explore
-    data = Participant.cluster_champs_by_build
-    @test_variable_1 = data[0]
-    @test_variable_2 = data[1]
-    @test_variable_3 = data[2]
-    @test_variable_4 = data[3]
-    @test_variable_5 = data[4]
-    @test_variable_6 = data[5]
-
-    file_1 = File.absolute_path("lib/assets/clusters/NA_ranked_5.11.0.270_100.json")
-    @test_json_1 = File.read(file_1).html_safe
-
-    file_2 = File.absolute_path("lib/assets/clusters/NA_ranked_5.11.0.270_1000.json")
-    @test_json_2 = File.read(file_2).html_safe
+    @clusters_511_all = File.read(File.absolute_path("lib/assets/comparisons/clusters_511_all.json")).html_safe
+    @clusters_514_all = File.read(File.absolute_path("lib/assets/comparisons/clusters_514_all.json")).html_safe
   end
 end

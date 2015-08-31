@@ -1,12 +1,14 @@
 $(document).ready(Sunburst());
 
 function Sunburst() {
-  var data1 = <%= @test_variable_6 %>;
-  var data2 = <%= @test_json_2 %>;
   var datasets = {
-    data1: function() { return data1; },
-    data2: function() { return data2; }
+    data1: function() { return <%= @clusters_511_all %>; },
+    data2: function() { return <%= @clusters_514_all %>; }
   };
+
+  $('select.scale').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
+
+  $('select.data').on('input', function (e) { changeData(datasets[e.currentTarget.selectedOptions[0].dataset.data]()); });
 
   var root = data1;
 
@@ -125,10 +127,6 @@ function Sunburst() {
     }
 
   };
-
-  $('select.scale').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
-
-  $('select.data').on('input', function (e) { changeData(datasets[e.currentTarget.selectedOptions[0].dataset.data]()); });
 
 
   function click(d) {

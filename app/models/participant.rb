@@ -42,6 +42,7 @@ class Participant < ActiveRecord::Base
         if !(champ_hash_1[champ]['items'] & items_AP).empty? || !(champ_hash_2[champ]['items'] & items_AP).empty?
           key = champ
           value = {
+            'id' => key,
             'name' => champ_hash_1[champ]['name'],
             'image' => champ_hash_1[champ]['image'],
             'count1' => champ_hash_1[champ]['count'],
@@ -79,6 +80,7 @@ class Participant < ActiveRecord::Base
 
         key = champ
         value = {
+          'id' => key,
           'name' => champ_hash_1[champ]['name'],
           'image' => champ_hash_1[champ]['image'],
           'count1' => champ_hash_1[champ]['count'],
