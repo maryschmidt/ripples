@@ -1,7 +1,7 @@
-$(document).ready(ApItems());
+$(document).ready(ApChamps());
 
-function ApItems() {
-  var data = <%= @ap_items %>
+function ApChamps() {
+  var data = <%= @ap_champs %>
 
   var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
   var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
@@ -39,16 +39,11 @@ function ApItems() {
                  .orient("left")
                  .tickFormat(d3.format("%"));
 
-  var svg = d3.select(".ap-items-viz").append("svg")
+  var svg = d3.select(".ap-champs-viz").append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  // data.forEach(function(d) {
-  //   d.counts = [{name: 'first', value: d.count1}, {name: 'second', value: d.count2}];
-  //   d.winrates = [{name: 'first', value: d.winrate1}, {name: 'second', value: d.winrate2}];
-  // });
 
   x0.domain(data.map(function(d) { return d.name; }));
   x1.domain(['first', 'second']).rangeRoundBands([0, x0.rangeBand()]);
@@ -82,13 +77,13 @@ function ApItems() {
     .style("fill", "#ededed")
     .text("Winrate");
 
-  var item = svg.selectAll(".item")
+  var champ = svg.selectAll(".champ")
     .data(data)
     .enter().append("g")
     .attr("class", "g")
     .attr("transform", function(d) { return "translate(" + x0(d.name) + ",0)"; });
 
-  item.selectAll("rect")
+  champ.selectAll("rect")
     .data(function(d) { return d.plotdata; })
     .enter().append("rect")
     .attr("width", x1.rangeBand())
@@ -102,11 +97,14 @@ function ApItems() {
   var ticks = svg.select(".x.axis").selectAll(".tick")
                 .data(data)
                 .append("svg:image")
-                .attr("xlink:href", function(d) { return itemImage + d.image; })
-                .attr("width", 30)
-                .attr("height", 30)
-                .attr("x", -15)
-                .attr("y", ".5em");
+                .attr("xlink:href", function(d) { return championImage + d.image; })
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("x", -10)
+                .attr("y", function(d,i) { return (i % 2) ? 26 : 4; });
+
+  var ticklines = svg.select(".x.axis").selectAll(".tick line")
+                    .attr("y2", function(d,i) { return (i % 2) ? (6 + 24) : 6; });
 
   var legend = svg.selectAll(".legend")
     .data(['Patch 5.11', 'Patch 5.14'])
@@ -127,11 +125,11 @@ function ApItems() {
     .style("text-anchor", "end")
     .text(function(d) { return d; });
 
-  $('select.scale.apItems').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
+  $('select.scale.apChamps').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
 
   function changeScaling(sizing) {
     if (sizing == "count") {
-      item.selectAll("rect")
+      champ.selectAll("rect")
         .transition()
         .duration(500)
         .attr("y", function(d) { return y0(d.cValue); })
@@ -140,7 +138,7 @@ function ApItems() {
       svg.select(".y.axis.count").classed("hidden", false);
       svg.select(".y.axis.rate").classed("hidden", true);
     } else {
-      item.selectAll("rect")
+      champ.selectAll("rect")
         .transition()
         .duration(500)
         .attr("y", function(d) { return y1(d.wValue); })

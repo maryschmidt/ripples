@@ -49,7 +49,8 @@ class Participant < ActiveRecord::Base
             'winrate1' => champ_hash_1[champ]['wins'] / champ_hash_1[champ]['count'].to_f,
             'winrate2' => champ_hash_2[champ]['wins'] / champ_hash_2[champ]['count'].to_f,
             'items1' => champ_hash_1[champ]['itemImages'],
-            'items2' => champ_hash_2[champ]['itemImages']
+            'items2' => champ_hash_2[champ]['itemImages'],
+            'plotdata' => [{'name' => 'first', 'cValue' => champ_hash_1[champ]['count'], 'wValue' => (champ_hash_1[champ]['wins'] / champ_hash_1[champ]['count'].to_f)}, {'name' => 'second', 'cValue' => champ_hash_2[champ]['count'], 'wValue' => (champ_hash_2[champ]['wins'] / champ_hash_2[champ]['count'].to_f)}]
           }
           champs_AP_hash[key] = value
         end
@@ -94,8 +95,8 @@ class Participant < ActiveRecord::Base
     return [ tree_1,
              tree_2,
              items_AP_hash.values.to_json.html_safe,
-             champs_AP_hash.to_json.html_safe,
-             champs_delta_hash.to_json.html_safe,
+             champs_AP_hash.values.to_json.html_safe,
+             champs_delta_hash.values.to_json.html_safe,
              champ_hash_1.to_json.html_safe,
              champ_hash_2.to_json.html_safe,
              item_hash_1.to_json.html_safe,

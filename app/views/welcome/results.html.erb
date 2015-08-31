@@ -3,13 +3,22 @@
   <h2>1. More distinct identities among mages</h2>
   <div class='row'>
     <div class='dropdown blue'>
-      <select class='scale'>
+      <select class='scale apItems'>
         <option id='count' value="count" data-slice='count'>Popularity</option>
         <option id='winrate' value="winrate" data-slice='winrate'>Winrate</option>
       </select>
     </div>
   </div>
   <div class='ap-items-viz'></div>
+  <div class='row'>
+    <div class='dropdown red'>
+      <select class='scale apChamps'>
+        <option id='count' value="count" data-slice='count'>Popularity</option>
+        <option id='winrate' value="winrate" data-slice='winrate'>Winrate</option>
+      </select>
+    </div>
+  </div>
+  <div class='ap-champs-viz'></div>
 </div>
 <!-- <div><%= @ap_items %></div> -->
 <!-- <div><%= @ap_champs %></div> -->
@@ -68,4 +77,8 @@ svg {
 
 <script>
 <%= render 'welcome/apitems.js' %>
+</script>
+
+<script>
+<%= render 'welcome/apchamps.js' %>
 </script>
