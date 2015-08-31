@@ -1,7 +1,7 @@
 $(document).ready(Sunburst());
 
 function Sunburst() {
-  var data1 = <%= @test_json_1 %>;
+  var data1 = <%= @test_variable_6 %>;
   var data2 = <%= @test_json_2 %>;
   var datasets = {
     data1: function() { return data1; },
@@ -141,7 +141,7 @@ function Sunburst() {
     tooltipDiv.transition()
       .duration(200)
       .style("opacity", 0.9);
-    tooltipDiv.html( d.depth ? ("hi i'm a tooltip " + (d.id ? d.name : "cluster")) : ("WHY ARE YOU LOOKING AT ME?"))
+    tooltipDiv.html( d.depth ? ("hi i'm a tooltip " + (d.id ? (d.name + " builds " + d.items) : ("cluster builds " + d.items))) : ("WHY ARE YOU LOOKING AT ME? " + d.items))
       .classed("hidden", false)
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 28) + "px");

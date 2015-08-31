@@ -159,6 +159,29 @@ module Clusterable
       end
     end
 
+    def average_vectors(vect1, vect1_weight, vect2, vect2_weight)
+      sum_vect = Array.new(vect1.length, 0)
+
+      vect1_weight.times do
+        vect1.each_with_index do |ele, index|
+          sum_vect[index] += ele
+        end
+      end
+
+      vect2_weight.times do
+        vect2.each_with_index do |ele, index|
+          sum_vect[index] += ele
+        end
+      end
+
+      total_weight = vect1_weight + vect2_weight
+      sum_vect.each_with_index do |ele, index|
+        sum_vect[index] = ele/total_weight
+      end
+
+      sum_vect
+    end
+
     def build_tree(ref_hash, label_hash, merge_list, threshold_interval)
       # Initialize tree hash
       tree = Hash.new
@@ -166,7 +189,7 @@ module Clusterable
       # Build initial tree from reference hash of known format
       ref_hash.each do |key, value|
         tree_key = value['index']
-        tree_value = {'index' => tree_key, 'id' => key, 'name' => value['name'], 'winrate' => (value['wins'] / value['count']), 'size' => value['count']}
+        tree_value = {'index' => tree_key, 'id' => key, 'name' => value['name'], 'winrate' => (value['wins'] / value['count']), 'size' => value['count'], 'image' => value['image'], 'items' => value['itemImages'], 'vector' => value['rawVector'], 'vectorCount' => 1}
 
         tree[tree_key] = tree_value
       end
@@ -181,6 +204,19 @@ module Clusterable
 
         hash_1 = tree.delete(k_1)
         hash_2 = tree.delete(k_2)
+        hash_1_vector = hash_1['vector']
+        hash_2_vector = hash_2['vector']
+        hash_1_count = hash_1['vectorCount']
+        hash_2_count = hash_2['vectorCount']
+
+        hash_1.delete('vector')
+        hash_1.delete('vectorCount')
+        hash_2.delete('vector')
+        hash_2.delete('vectorCount')
+
+        new_vector = average_vectors(hash_1_vector, hash_1_count, hash_2_vector, hash_2_count)
+        new_vectorCount = hash_1_count + hash_2_count
+        hash_items, hash_item_images = label_from_vector(new_vector, label_hash, 8)
 
         if similarity >= threshold
           # Extract children if the exist
@@ -192,18 +228,35 @@ module Clusterable
             hash_2 = hash_2['children']
           end
 
-          tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2].flatten(1)}
+
+          tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2].flatten(1), 'items' => hash_item_images, 'vector' => new_vector, 'vectorCount' => new_vectorCount}
         else
           threshold = threshold - threshold_interval
-          tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2]}
+          tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2], 'items' => hash_item_images, 'vector' => new_vector, 'vectorCount' => new_vectorCount}
         end
       end
 
-      values_array = tree.values
 
-      if values_array.length > 1
-        tree_result = {'id' => 'champs', 'index' => 0, 'children' => values_array}
+      final_vector = Array.new(ref_hash.values[0]['rawVector'].length , 0)
+      final_vector_count = 0
+
+      if tree.length > 1
+        tree.each_pair do |key, value|
+          final_vector = average_vectors(final_vector, final_vector_count, value['vector'], value['vectorCount'])
+          value.delete('vector')
+          value.delete('vectorCount')
+        end
+        final_items, final_item_images = label_from_vector(final_vector, label_hash, 8)
+
+        values_array = tree.values
+        tree_result = {'index' => 0, 'children' => values_array, 'items' => final_item_images}
       else
+        tree.each_value do |value|
+          value.delete('vector')
+          value.delete('vectorCount')
+        end
+
+        values_array = tree.values
         tree_result = values_array
       end
 
