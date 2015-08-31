@@ -1,11 +1,12 @@
 class Participant < ActiveRecord::Base
   include Clusterable
   include Champion
+  include Item
 
   belongs_to :match
 
   # Cluster champs by build
-  def self.cluster_champs_by_build(participants=Participant.all, count=100)
+  def self.cluster_champs_by_build(participants=Participant.all, count=1000)
 
     # Look up appropriate participants
     # participants = Participant.where(match.region: region, match.match_version: patch)
@@ -24,19 +25,34 @@ class Participant < ActiveRecord::Base
     participant_subset.each do |participant|
       puts "hashes #{participant.id}"
       if !champ_hash.has_key?(participant.champion_id)
-        champ_hash[participant.champion_id] = {'index' => champ_index, 'count' => 1, 'name' => self.champion_name_for_id(participant.champion_id.to_s)['name']}
+        champ_hash[participant.champion_id] = {'index' => champ_index, 'count' => 1, 'wins' => 0, 'name' => self.champion_name_for_id(participant.champion_id.to_s), 'image' => self.champion_image_for_id(participant.champion_id.to_s)}
+        if participant.win
+          champ_hash[participant.champion_id]['wins'] += 1
+        end
+
         champ_index += 1
       else
         champ_hash[participant.champion_id]['count'] += 1
+
+        if participant.win
+          champ_hash[participant.champion_id]['wins'] += 1
+        end
       end
 
       participant.items.each do |item|
         if !ignored_items.include?(item)
           if !item_hash.has_key?(item)
-            item_hash[item] = {'index' => item_index, 'count' => 1}
+            item_hash[item] = {'index' => item_index, 'count' => 1, 'wins' => 0, 'name' => self.item_name_for_id(item.to_s), 'image' => self.item_image_for_id(item.to_s)}
+            if participant.win
+              item_hash[item]['wins'] += 1
+            end
+
             item_index += 1
           else
             item_hash[item]['count'] += 1
+            if participant.win
+              item_hash[item]['wins'] += 1
+            end
           end
         else
           items_ignored += 1
@@ -49,11 +65,23 @@ class Participant < ActiveRecord::Base
 
     puts "items_ignored #{items_ignored}"
 
+    # Add labels to champ_hash
+    champ_hash.each_pair do |c_key, c_value|
+      c_index = c_value['index']
+      c_vector = matrix[c_index]
+
+      c_items, c_item_images = label_from_vector(c_vector, item_hash, 8)
+
+      champ_hash[c_key]['rawVector'] = c_vector
+      champ_hash[c_key]['items'] = c_items
+      champ_hash[c_key]['itemImages'] = c_item_images
+    end
+
     # Cluster
     seeds, clusters, mergelist = hac(matrix)
 
     # Build tree list
-    tree = build_tree(champ_hash, mergelist, 0.05)
+    tree = build_tree(champ_hash, item_hash, mergelist, 0.05)
 
     # Assemble output and label
     return [champ_hash, item_hash, clusters, mergelist, seeds, tree.to_json.html_safe]

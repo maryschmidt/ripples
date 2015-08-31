@@ -133,7 +133,11 @@ module Champion
 
   module ClassMethods
     def champion_name_for_id(champion_id)
-      CHAMPIONS[champion_id]
+      CHAMPIONS[champion_id]["name"]
+    end
+
+    def champion_image_for_id(champion_id)
+      CHAMPIONS[champion_id]["image"]
     end
   end
 end

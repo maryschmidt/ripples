@@ -155,18 +155,18 @@ module Clusterable
       if euclength <= 0.0
         return vect
       else
-        return vect.map { |ele| ele = ele/euclength } 
+        return vect.map { |ele| ele = ele/euclength }
       end
     end
 
-    def build_tree(ref_hash, merge_list, threshold_interval)
+    def build_tree(ref_hash, label_hash, merge_list, threshold_interval)
       # Initialize tree hash
       tree = Hash.new
 
       # Build initial tree from reference hash of known format
       ref_hash.each do |key, value|
         tree_key = value['index']
-        tree_value = {'index' => tree_key, 'id' => key, 'name' => value['name'], 'size' => value['count']}
+        tree_value = {'index' => tree_key, 'id' => key, 'name' => value['name'], 'winrate' => (value['wins'] / value['count']), 'size' => value['count']}
 
         tree[tree_key] = tree_value
       end
@@ -209,5 +209,39 @@ module Clusterable
 
       return tree_result
     end
+
+
+    def label_from_vector(vect, ref_hash, label_count)
+      # Find label_count largest values in vector and append the id and image fields from ref_hash to labels and label_images, respectively
+      # Will have to find correct ref_hash value by value 'index', then pull out the key ('id') and 'image'
+      # Protect the input vector
+      vector = vect.dup
+      labels = Array.new()
+      label_images = Array.new()
+
+      label_count.times do
+        vectmax = vector.max
+        if vectmax > 0
+          i = vector.index(vectmax)
+
+          ref_hash.each_pair do |key, value|
+            if value['index'] == i
+              labels.push(key)
+              label_images.push(value['image'])
+              break
+            end
+          end
+
+          vector[i] = 0
+
+        else
+          break
+        end
+      end
+
+      [labels, label_images]
+    end
+
+
   end
 end
