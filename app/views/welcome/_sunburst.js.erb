@@ -162,11 +162,19 @@ function Sunburst() {
         <img class='item' src=" + (itemImage + d.items[5]) + ">"
       $('.window .items').html(championItemHtml)
 
-      // champion winrate
-
     } else {
       // cluster selected
-      console.log('cluster');
+      clusterInnerHtml = "<div class='items cluster column'></div>"
+      $('.window').html(clusterInnerHtml);
+
+      clusterItemHtml = "<div class='heading'>Cluster Items</div>\
+        <img class='item' src=" + (itemImage + d.items[0]) + ">\
+        <img class='item' src=" + (itemImage + d.items[1]) + ">\
+        <img class='item' src=" + (itemImage + d.items[2]) + ">\
+        <img class='item' src=" + (itemImage + d.items[3]) + ">\
+        <img class='item' src=" + (itemImage + d.items[4]) + ">\
+        <img class='item' src=" + (itemImage + d.items[5]) + ">"
+      $('.window .items').html(clusterItemHtml)
     }
   }
 

@@ -186,7 +186,8 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
 }
 
 .controls-container {
-  margin: 36px auto 36px auto;
+  margin: 48px auto 36px auto;
+  float: right;
   text-align: right;
 }
 
@@ -206,7 +207,7 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
     margin: 0 12px 0 0;
 
     .heading {
-      font-size: 24px;
+      font-size: 18px;
       line-height: 28px;
       text-align: center;
       font-weight: 500;
@@ -239,10 +240,17 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
       margin: 2px;
       width: 44px;
     }
-  }
 
-  .winrate {
-    font-size: 28px;
+    &.cluster {
+      display: block;
+      text-align: center;
+
+      .item {
+        height: 60px;
+        margin: 2px;
+        width: 60px;
+      }
+    }
   }
 }
 
