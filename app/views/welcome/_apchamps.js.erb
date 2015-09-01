@@ -48,7 +48,7 @@ function ApChamps() {
   x0.domain(data.map(function(d) { return d.name; }));
   x1.domain(['first', 'second']).rangeRoundBands([0, x0.rangeBand()]);
   y0.domain([0, d3.max(data, function(d) { return Math.max(d.count1, d.count2); })]);
-  y1.domain([0, d3.max(data, function(d) { return Math.max(d.winrate1, d.winrate2); })]);
+  y1.domain([0.4, 0.58]);
 
   svg.append("g")
     .attr("class", "x axis")

@@ -45,15 +45,10 @@ function ApItems() {
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // data.forEach(function(d) {
-  //   d.counts = [{name: 'first', value: d.count1}, {name: 'second', value: d.count2}];
-  //   d.winrates = [{name: 'first', value: d.winrate1}, {name: 'second', value: d.winrate2}];
-  // });
-
   x0.domain(data.map(function(d) { return d.name; }));
   x1.domain(['first', 'second']).rangeRoundBands([0, x0.rangeBand()]);
   y0.domain([0, d3.max(data, function(d) { return Math.max(d.count1, d.count2); })]);
-  y1.domain([0, d3.max(data, function(d) { return Math.max(d.winrate1, d.winrate2); })]);
+  y1.domain([0.4, 0.75]);
 
   svg.append("g")
     .attr("class", "x axis")
@@ -69,7 +64,7 @@ function ApItems() {
     .attr("dx", ".71em")
     .style("text-anchor", "middle")
     .style("fill", "#ededed")
-    .text("Games Played");
+    .text("Times Built");
 
   svg.append("g")
     .attr("class", "y axis rate hidden")

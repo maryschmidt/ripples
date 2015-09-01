@@ -1,0 +1,34 @@
+$(document).ready(CheckAChamp());
+
+function CheckAChamp() {
+
+  var champDiffs = <%= @champ_diffs %>;
+  var champCount = champDiffs.length;
+
+  var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
+  var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
+
+  $('').on('input', function(e) {
+    updateComparison($('').val());
+  };
+
+  function updateComparison(newName) {
+
+    for (var i=0; i < champCount; i++) {
+      if (champDiffs[i].name == newName) {
+        $('#champimage').html("<img src=" + championImage + champDiffs[i].image + ">");
+        $('.itemImage#1').html("<img src=" + itemImage + champDiffs[i].items1[0] + ">");
+        $('.itemImage#2').html("<img src=" + itemImage + champDiffs[i].items2[0] + ">");
+        //etc...
+
+        diffvalue = champDiffs[i].delta / Math.sqrt(2);
+        diffvalue = diffvalue * 100;
+        diffvalue = diffvalue.toFixed(2);
+        $('#diffValue').html(diffvalue + '%');
+
+        break;
+      }
+    }
+
+  }
+}
