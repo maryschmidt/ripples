@@ -11,39 +11,39 @@ function ApItems() {
       height = 420 - margin.top - margin.bottom;
 
   var x0 = d3.scale.ordinal()
-             .rangeRoundBands([0, width], .25);
+    .rangeRoundBands([0, width], .25);
 
   var x1 = d3.scale.ordinal();
 
   var y0 = d3.scale.linear()
-             .range([height, 0]);
+    .range([height, 0]);
 
   var y1 = d3.scale.linear()
-             .range([height, 0]);
+    .range([height, 0]);
 
   var color = d3.scale.ordinal()
-                .range(['#FA356F', '#1CC3EE']);
+    .range(['#FA356F', '#1CC3EE']);
 
   var xAxis = d3.svg.axis()
-                .scale(x0)
-                .orient("bottom")
-                .tickFormat('');
+    .scale(x0)
+    .orient("bottom")
+    .tickFormat('');
 
   var y0Axis = d3.svg.axis()
-                 .scale(y0)
-                 .orient("left")
-                 .tickFormat(d3.format(".2s"));
+    .scale(y0)
+    .orient("left")
+    .tickFormat(d3.format(".2s"));
 
   var y1Axis = d3.svg.axis()
-                 .scale(y1)
-                 .orient("left")
-                 .tickFormat(d3.format("%"));
+    .scale(y1)
+    .orient("left")
+    .tickFormat(d3.format("%"));
 
   var svg = d3.select(".ap-items-viz").append("svg")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
-              .append("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   x0.domain(data.map(function(d) { return d.name; }));
   x1.domain(['first', 'second']).rangeRoundBands([0, x0.rangeBand()]);
@@ -96,13 +96,13 @@ function ApItems() {
   svg.select(".x.axis").selectAll("text").remove();
 
   var ticks = svg.select(".x.axis").selectAll(".tick")
-                .data(data)
-                .append("svg:image")
-                .attr("xlink:href", function(d) { return itemImage + d.image; })
-                .attr("width", 30)
-                .attr("height", 30)
-                .attr("x", -15)
-                .attr("y", ".5em");
+    .data(data)
+    .append("svg:image")
+    .attr("xlink:href", function(d) { return itemImage + d.image; })
+    .attr("width", 30)
+    .attr("height", 30)
+    .attr("x", -15)
+    .attr("y", ".5em");
 
   var legend = svg.selectAll(".legend")
     .data(['Patch 5.11', 'Patch 5.14'])
@@ -146,5 +146,4 @@ function ApItems() {
       svg.select(".y.axis.rate").classed("hidden", false);
     }
   };
-
 }

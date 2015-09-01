@@ -1,15 +1,7 @@
 module Clusterable
   extend ActiveSupport::Concern
 
-  included do
-    # This code will be executed in the context of the class that's including the module
-  end
-
-  # Write methods here that you need for clustering
-
   module ClassMethods
-    # These are class methods of the class including the module
-    # Pretty cool, huh?!?
 
     def test_class_count
       return self.count
@@ -17,7 +9,7 @@ module Clusterable
 
     # Hierarchical agglomerative clustering of a matrix
     def hac(matrix)
-      # Set number of clusters (simplest cutoff method)
+      # Set target number of clusters
       k = 1
       # Set similarity threshold
       threshold = 0
@@ -84,7 +76,6 @@ module Clusterable
             new_sum[index] += ele
           end
         end
-        # new_sum = normalize_vector(new_sum)
 
         j.each_with_index do |active, index|
           if active == 1 && index != k_1
@@ -105,10 +96,6 @@ module Clusterable
             end
 
             new_c = (1.0/(sum_length * (sum_length - 1))) * (dotproduct(sum_vectors, sum_vectors) - sum_length)
-
-            if new_c > 1
-              puts new_c
-            end
 
             p[k_1].push([new_c, index])
             p[index].push([new_c, k_1])
@@ -228,11 +215,13 @@ module Clusterable
             hash_2 = hash_2['children']
           end
 
-
           tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2].flatten(1), 'items' => hash_item_images, 'vector' => new_vector, 'vectorCount' => new_vectorCount}
+
         else
+
           threshold = threshold - threshold_interval
           tree[k_1] = {'index' => k_1, 'children' => [hash_1, hash_2], 'items' => hash_item_images, 'vector' => new_vector, 'vectorCount' => new_vectorCount}
+
         end
       end
 
@@ -263,12 +252,10 @@ module Clusterable
       return tree_result
     end
 
-
     def label_from_vector(vect, ref_hash, label_count)
-      # Find label_count largest values in vector and append the id and image fields from ref_hash to labels and label_images, respectively
-      # Will have to find correct ref_hash value by value 'index', then pull out the key ('id') and 'image'
       # Protect the input vector
       vector = vect.dup
+
       labels = Array.new()
       label_images = Array.new()
 
@@ -293,8 +280,8 @@ module Clusterable
       end
 
       [labels, label_images]
-    end
 
+    end
 
   end
 end

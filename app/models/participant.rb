@@ -111,9 +111,6 @@ class Participant < ActiveRecord::Base
   # Cluster champs by build
   def self.cluster_champs_by_build(participants=Participant.all.limit(1000).order(:id))
 
-    # Look up appropriate participants
-    # participants = Participant.where(match.region: region, match.match_version: patch)
-
     champ_hash = Hash.new
     champ_index = 0
     item_hash = Hash.new
@@ -199,9 +196,6 @@ class Participant < ActiveRecord::Base
     # Set up array to return
     matrix = Array.new(champ_hash.length) { Array.new(item_hash.length, 0.0) }
 
-    bad_build_vectors = 0
-    bad_participants = []
-
     # Loop through participants
     participants.each do |participant|
       puts "matrix #{participant.id}"
@@ -218,52 +212,8 @@ class Participant < ActiveRecord::Base
       # Normalize build_vector to unit length
       build_vector = normalize_vector(build_vector)
 
-      # if item vector is only ignored items, then build_vector is all zeros and breaks with divide by zero when normalized
-      bad_build_vector_flag = 0
-      build_vector.each do |ele|
-        if ele.nan?
-          bad_build_vector_flag = 1
-        end
-      end
-      if bad_build_vector_flag == 1
-        bad_build_vectors += 1
-        bad_participants.push(participant)
-      end
-
       # Add it to main matrix
       matrix[champ_index] = matrix[champ_index].zip(build_vector).map { |pair| pair.reduce(&:+) }
-    end
-
-    # Check for NaNs and < 0s
-    notnums = 0
-    lessthanzeros = 0
-    badrows = 0
-
-    matrix.each do |row|
-      badrowflag = 0
-      row.each do |ele|
-        if ele.nan?
-          notnums += 1
-          badrowflag = 1
-        elsif ele < 0.0
-          lessthanzeros += 1
-          badrowflag = 1
-        end
-      end
-
-      if badrowflag == 1
-        badrows += 1
-      end
-    end
-
-    puts "notnums #{notnums}"
-    puts "lessthanzeros #{lessthanzeros}"
-    puts "badrows #{badrows}"
-    puts "bad_build_vectors #{bad_build_vectors}"
-    if !bad_participants.empty?
-      puts bad_participants.first.items
-    else
-      puts "no bad participants"
     end
 
     # Normalize each vector of main matrix
