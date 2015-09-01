@@ -1,6 +1,18 @@
-# Riot-ripples
+# Ripples
 
-## Getting Started
+Entry for the 2nd Riot Games API Challenge, showing the changes in AP item
+usage across patches 5.11 and 5.14.
+
+We decided to use machine learning and data visualization to look at the changes
+brought on champion builds by the AP Item changes.  But not just the AP item
+builders -- let's look at the Ripples of those changes and how they affect the
+rest of the LoL world.
+
+You can play with the app [here](http://riot-ripples.herokuapp.com/).
+
+## So you want to run this app...
+
+Hooray!
 
 After you have cloned this repo, run this setup script to set up your machine
 with the necessary dependencies to run and test this app:
