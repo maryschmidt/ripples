@@ -369,9 +369,15 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
 .footer {
   background-color: $dark-background-color;
   color: $light-gray;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 0.65em;
   text-align: center;
-  line-height: 80px;
+  line-height: 1.25em;
+  p {
+    margin: 0 auto;
+    padding: 1em 0;
+    max-width: 800px;
+  }
 }
 
 .dropdown {
