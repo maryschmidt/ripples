@@ -437,6 +437,9 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
     &:focus {
       outline: none;
     }
+    option {
+      background: $dark-background-color;
+    }
   }
 }
 
