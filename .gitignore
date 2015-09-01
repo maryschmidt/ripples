@@ -7,7 +7,12 @@
 /.foreman
 /coverage/*
 /db/*.sqlite3
-/lib/assets
+/lib/assets/euw_ranked_511.json
+/lib/assets/euw_ranked_514.json
+/lib/assets/kr_ranked_511.json
+/lib/assets/kr_ranked_514.json
+/lib/assets/na_ranked_511.json
+/lib/assets/na_ranked_514.json
 /log/*
 /public/system
 /public/assets
