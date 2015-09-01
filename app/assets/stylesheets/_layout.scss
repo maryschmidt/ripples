@@ -122,7 +122,7 @@ b {
 body.high_voltage-pages .wrapper, body.welcome .wrapper {
   background-color: $dark-background-color;
   color: $light-gray;
-  min-height: calc(100% - 160px);
+  min-height: calc(100% - 80px);
 }
 
 .static-wrapper {
@@ -448,4 +448,17 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   width: 164px;
   height: 120px;
   display: inline-block;
+}
+
+.not-penguin-wrapper {
+  display: inline-block;
+  width: calc(100% - 260px);
+  vertical-align: top;
+  margin-top: 48px;
+}
+
+img.penguin {
+  display: inline-block;
+  width: 250px;
+  margin: 12px auto;
 }
