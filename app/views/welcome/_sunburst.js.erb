@@ -2,15 +2,29 @@ $(document).ready(Sunburst());
 
 function Sunburst() {
   var datasets = {
-    data1: function() { return <%= @clusters_511_all %>; },
-    data2: function() { return <%= @clusters_514_all %>; }
+    all_511: function() { return <%= @clusters_511_all %>; },
+    all_514: function() { return <%= @clusters_514_all %>; },
+    na_511: function() { return <%= @clusters_511_na %>; },
+    na_514: function() { return <%= @clusters_514_na %>; },
+    euw_511: function() { return <%= @clusters_511_euw %>; },
+    euw_514: function() { return <%= @clusters_514_euw %>; },
+    kr_511: function() { return <%= @clusters_511_kr %>; },
+    kr_514: function() { return <%= @clusters_514_kr %>; }
   };
 
   $('select.scale').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
 
-  $('select.data').on('input', function (e) { changeData(datasets[e.currentTarget.selectedOptions[0].dataset.data]()); });
+  $('select.data').on('input', function (e) {
+    set = $('select.region').val() + '_' + $('select.data').val();
+    changeData(datasets[set]());
+  });
 
-  var root = datasets.data1();
+  $('select.region').on('input', function(e) {
+    set = $('select.region').val() + '_' + $('select.data').val();
+    changeData(datasets[set]());
+  });
+
+  var root = datasets.all_514();
 
   var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
   var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
