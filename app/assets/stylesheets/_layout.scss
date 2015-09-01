@@ -261,11 +261,25 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
 
   &.results {
     margin: 36px auto 4em auto;
-    width: 664px;
+    width: 838px;
     height: 200px;
 
+    .column {
+      margin: 0 24px 0 0;
+    }
+
+    .dropdown {
+      display: inline-block;
+      background: #100e30;
+      border: 1px solid #1c1953;
+
+      &:hover {
+        background: #100e30;
+      }
+    }
+
     .items.column {
-      width: calc(100% - (140px * 2));
+      width: calc(100% - (227px * 2));
       text-align: center;
       .heading {
         display: block;

@@ -33,7 +33,7 @@ function CheckAChamp() {
         diffvalue = champDiffs[i].delta / Math.sqrt(2);
         diffvalue = diffvalue * 100;
         diffvalue = diffvalue.toFixed(2);
-        $('.diff').append(diffvalue + '% Different');
+        $('.diff').text(diffvalue + '% Different');
 
         break;
       }
