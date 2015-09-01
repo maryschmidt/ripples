@@ -108,6 +108,13 @@ b {
       line-height: 24px;
       margin: 36px auto 36px auto;
       text-align: center;
+
+      &.red {
+        color: $accent-red;
+        margin: 36px auto 18px auto;
+        text-align: left;
+        text-shadow: 0 0 12px #f3638e;
+      }
     }
   }
 }
@@ -334,6 +341,15 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
     background: darken($accent-violet, 10) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
   }
 
+  &.red {
+    background: darken($accent-red, 15) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
+    border: 2px solid lighten($accent-red, 5);
+
+    &:hover {
+      background: darken($accent-red, 10) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
+    }
+  }
+
   &.blue {
     background: darken($accent-blue, 15) url("data:image/png;base64,R0lGODlhDwAUAIABAAAAAP///yH5BAEAAAEALAAAAAAPABQAAAIXjI+py+0Po5wH2HsXzmw//lHiSJZmUAAAOw==") no-repeat 90% 50%;
     border: 2px solid lighten($accent-blue, 5);
@@ -374,4 +390,8 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
       outline: none;
     }
   }
+}
+
+.highlight .row {
+  margin-top: 36px;
 }
