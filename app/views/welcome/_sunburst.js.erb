@@ -28,10 +28,6 @@ function Sunburst() {
 
   var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
   var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
-  // var $container = $('.data-vis');
-  // var width = $container.width(),
-  //     height = $container.height(),
-  //     radius = Math.min(width, height) / 2 - 20;
 
   var width = 700,
     height = 700,
@@ -44,7 +40,7 @@ function Sunburst() {
     .range([0, radius]);
 
   var color = d3.scale.ordinal()
-                .range(['#B01CEE', '#DFA4F8', '#1CC3EE', '#a4e7f8', '#1CEEB0', '#a4f8df', '#F6A110', '#fbd99f', '#EE1C5A', '#f8a4bd']);
+    .range(['#B01CEE', '#DFA4F8', '#1CC3EE', '#a4e7f8', '#1CEEB0', '#a4f8df', '#F6A110', '#fbd99f', '#EE1C5A', '#f8a4bd']);
 
   var svg = d3.select(".data-vis").append("svg")
     .attr("width", width)
@@ -68,8 +64,6 @@ function Sunburst() {
     .attr("class", "tooltip sunburst hidden")
     .style("opacity", 0);
 
-  // Keep track of the node that is currently being displayed as the root.
-
   var node = root;
   var path = svg.selectAll("path")
     .data(partition.nodes(root))
@@ -81,8 +75,6 @@ function Sunburst() {
     .on("mouseover", showTooltip)
     .on("mouseout", hideTooltip)
     .each(stash);
-
-  // path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
 
   path.transition()
     .duration(500)
@@ -101,7 +93,6 @@ function Sunburst() {
   };
 
   isChanging = false;
-
   function changeData(dataset) {
     if (!isChanging) {
 
@@ -129,15 +120,13 @@ function Sunburst() {
           .on("mouseout", hideTooltip)
           .each(stash);
 
-        // path.append("svg:title").text(function(d) { return d.id ? d.name : "cluster"; });
-
         path
           .transition()
           .duration(timing)
           .attr("opacity", function(d) { return d.depth ? 1 : 0; })
 
         isChanging = false;
-      }, timing + 50);
+      }, timing + 100);
     }
 
   };
