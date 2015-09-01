@@ -259,6 +259,16 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   width: 486px;
   max-width: 100%;
 
+  &.results {
+    margin: 36px auto 4em auto;
+    width: 840px;
+    height: 200px;
+
+    .items.column {
+      width: calc(100% - (140px * 2));
+    }
+  }
+
   h2 {
     text-align: center;
     max-width: 368px;
@@ -279,12 +289,18 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
       letter-spacing: 0.02em;
     }
 
+    &.diff {
+      width: 120px;
+    }
+
     &:last-child {
       margin: 0;
     }
   }
 
   .champion-portrait {
+    width: 120px;
+
     img {
       height: 120px;
       width: 120px;
