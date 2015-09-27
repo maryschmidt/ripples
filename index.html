@@ -2,22 +2,255 @@
 layout: default
 ---
 
-<div class="home">
+<div class='data-wrapper'>
+  <h1 class='red'>Highlights</h1>
+  <div class='highlight'>
+    <h2 class='red'>1. AP Items</h2>
+    <p>
+    First, check out how AP item usage changed with the <b>MASSIVE AP ITEM OVERHAUL!</b>  Rylai's got some new friends and just look at that Mejai's winrate!  Oh, and no one loves Rageblade.
+    </p>
+    <div class='row'>
+      <div class='dropdown red'>
+        <select class='scale apItems'>
+          <option id='count' value="count" data-slice='count'>Popularity</option>
+          <option id='winrate' value="winrate" data-slice='winrate'>Winrate</option>
+        </select>
+      </div>
+    </div>
+    <div class='ap-items-viz'></div>
+  </div>
 
-  <h1 class="page-heading">Posts</h1>
+  <div class='highlight'>
+    <h2 class='red'>2. AP(ish) Champs</h2>
+    <p>
+    Next, take a look at how your chosen champion who could semi-reasonably build AP items is doing!  Everyone's picking up Viktor in Solo Queue, no one chooses Zilean (still), and Elise has become a god.
+    </p>
+    <div class='row'>
+      <div class='dropdown red'>
+        <select class='scale apChamps'>
+          <option id='count' value="count" data-slice='count'>Popularity</option>
+          <option id='winrate' value="winrate" data-slice='winrate'>Winrate</option>
+        </select>
+      </div>
+    </div>
+    <div class='ap-champs-viz'></div>
+  </div>
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+  <div class='highlight'>
+    <h2 class='red'>3. Your Favorite Champ!</h2>
+    <p>
+    Finally, see how your favorite champion is building now.  Some started picking up Rylai's (like the jungle E's), a lot just tweaked their build priorities, and others, like Rammus, thought the changes were just "ok."  And Jungle Kayle is a thing now.
+    </p>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
+    <p>
+    Sadly, we cannot present comparisons for Caitlyn or Jayce, since no one played them in our 5.11 dataset!  And we can't show you Tahm Kench either.  Because his shield is too big.  And he wasn't out yet.
+    </p>
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+    <div class='window results'>
+      <div class='dropdown red column'>
+        <select class='champion' size='8'>
+          <option id='Aatrox' value="Aatrox">Aatrox</option>
+          <option id='Ahri' value="Ahri">Ahri</option>
+          <option id='Akali' value="Akali">Akali</option>
+          <option id='Alistar' value="Alistar">Alistar</option>
+          <option id='Amumu' value="Amumu">Amumu</option>
+          <option id='Anivia' value="Anivia">Anivia</option>
+          <option id='Annie' value="Annie" selected>Annie</option>
+          <option id='Ashe' value="Ashe">Ashe</option>
+          <option id='Azir' value="Azir">Azir</option>
+          <option id='Bard' value="Bard">Bard</option>
+          <option id='Blitzcrank' value="Blitzcrank">Blitzcrank</option>
+          <option id='Brand' value="Brand">Brand</option>
+          <option id='Braum' value="Braum">Braum</option>
+          <!-- <option id='Caitlyn' value="Caitlyn">Caitlyn</option> -->
+          <option id='Cassiopeia' value="Cassiopeia">Cassiopeia</option>
+          <option id="Cho'gath" value="Cho'gath">Cho'Gath</option>
+          <option id='Corki' value="Corki">Corki</option>
+          <option id='Darius' value="Darius">Darius</option>
+          <option id='Diana' value="Diana">Diana</option>
+          <option id='Dr. Mundo' value="Dr. Mundo">Dr. Mundo</option>
+          <option id='Draven' value="Draven">Draven</option>
+          <option id='Ekko' value="Ekko">Ekko</option>
+          <option id='Elise' value="Elise">Elise</option>
+          <option id='Evelynn' value="Evelynn">Evelynn</option>
+          <option id='Ezreal' value="Ezreal">Ezreal</option>
+          <option id='Fiddlesticks' value="Fiddlesticks">Fiddlesticks</option>
+          <option id='Fizz' value="Fizz">Fizz</option>
+          <option id='Galio' value="Galio">Galio</option>
+          <option id='Gangplank' value="Gangplank">Gangplank</option>
+          <option id='Garen' value="Garen">Garen</option>
+          <option id='Gnar' value="Gnar">Gnar</option>
+          <option id='Gragas' value="Gragas">Gragas</option>
+          <option id='Graves' value="Graves">Graves</option>
+          <option id='Hecarim' value="Hecarim">Hecarim</option>
+          <option id='Heimerdinger' value="Heimerdinger">Heimerdinger</option>
+          <option id='Irelia' value="Irelia">Irelia</option>
+          <option id='Janna' value="Janna">Janna</option>
+          <option id='Jarvan IV' value="Jarvan IV">Jarvan IV</option>
+          <option id='Jax' value="Jax">Jax</option>
+          <!-- <option id='Jayce' value="Jayce">Jayce</option> -->
+          <option id='Jinx' value="Jinx">Jinx</option>
+          <option id='Kalista' value="Kalista">Kalista</option>
+          <option id='Karma' value="Karma">Karma</option>
+          <option id='Karthus' value="Karthus">Karthus</option>
+          <option id='Kassadin' value="Kassadin">Kassadin</option>
+          <option id='Katarina' value="Katarina">Katarina</option>
+          <option id='Kayle' value="Kayle">Kayle</option>
+          <option id='Kennen' value="Kennen">Kennen</option>
+          <option id="Kha'Zix" value="Kha'Zix">Kha'Zix</option>
+          <option id="Kog'Maw" value="Kog'Maw">Kog'Maw</option>
+          <option id='LeBlanc' value="LeBlanc">LeBlanc</option>
+          <option id='Lee Sin' value="Lee Sin">Lee Sin</option>
+          <option id='Leona' value="Leona">Leona</option>
+          <option id='Lissandra' value="Lissandra">Lissandra</option>
+          <option id='Lucian' value="Lucian">Lucian</option>
+          <option id='Lulu' value="Lulu">Lulu</option>
+          <option id='Lux' value="Lux">Lux</option>
+          <option id='Malphite' value="Malphite">Malphite</option>
+          <option id='Malzahar' value="Malzahar">Malzahar</option>
+          <option id='Maokai' value="Maokai">Maokai</option>
+          <option id='Master Yi' value="Master Yi">Master Yi</option>
+          <option id='Miss Fortune' value="Miss Fortune">Miss Fortune</option>
+          <option id='Mordekaiser' value="Mordekaiser">Mordekaiser</option>
+          <option id='Morgana' value="Morgana">Morgana</option>
+          <option id='Nami' value="Nami">Nami</option>
+          <option id='Nasus' value="Nasus">Nasus</option>
+          <option id='Nautilus' value="Nautilus">Nautilus</option>
+          <option id='Nidalee' value="Nidalee">Nidalee</option>
+          <option id='Nocturne' value="Nocturne">Nocturne</option>
+          <option id='Nunu' value="Nunu">Nunu</option>
+          <option id='Olaf' value="Olaf">Olaf</option>
+          <option id='Orianna' value="Orianna">Orianna</option>
+          <option id='Pantheon' value="Pantheon">Pantheon</option>
+          <option id='Poppy' value="Poppy">Poppy</option>
+          <option id='Quinn' value="Quinn">Quinn</option>
+          <option id='Rammus' value="Rammus">Rammus</option>
+          <option id="Rek'Sai" value="Rek'Sai">Rek'Sai</option>
+          <option id='Renekton' value="Renekton">Renekton</option>
+          <option id='Rengar' value="Rengar">Rengar</option>
+          <option id='Riven' value="Riven">Riven</option>
+          <option id='Rumble' value="Rumble">Rumble</option>
+          <option id='Ryze' value="Ryze">Ryze</option>
+          <option id='Sejuani' value="Sejuani">Sejuani</option>
+          <option id='Shaco' value="Shaco">Shaco</option>
+          <option id='Shen' value="Shen">Shen</option>
+          <option id='Shyvana' value="Shyvana">Shyvana</option>
+          <option id='Singed' value="Singed">Singed</option>
+          <option id='Sion' value="Sion">Sion</option>
+          <option id='Sivir' value="Sivir">Sivir</option>
+          <option id='Skarner' value="Skarner">Skarner</option>
+          <option id='Sona' value="Sona">Sona</option>
+          <option id='Soraka' value="Soraka">Soraka</option>
+          <option id='Swain' value="Swain">Swain</option>
+          <option id='Syndra' value="Syndra">Syndra</option>
+          <!-- <option id='Tahm Kench' value="Tahm Kench">Tahm Kench</option> -->
+          <option id='Talon' value="Talon">Talon</option>
+          <option id='Taric' value="Taric">Taric</option>
+          <option id='Teemo' value="Teemo">Teemo</option>
+          <option id='Thresh' value="Thresh">Thresh</option>
+          <option id='Tristana' value="Tristana">Tristana</option>
+          <option id='Trundle' value="Trundle">Trundle</option>
+          <option id='Tryndamere' value="Tryndamere">Tryndamere</option>
+          <option id='Twisted Fate' value="Twisted Fate">Twisted Fate</option>
+          <option id='Twitch' value="Twitch">Twitch</option>
+          <option id='Udyr' value="Udyr">Udyr</option>
+          <option id='Urgot' value="Urgot">Urgot</option>
+          <option id='Varus' value="Varus">Varus</option>
+          <option id='Vayne' value="Vayne">Vayne</option>
+          <option id='Veigar' value="Veigar">Veigar</option>
+          <option id="Vel'Koz" value="Vel'Koz">Vel'Koz</option>
+          <option id='Vi' value="Vi">Vi</option>
+          <option id='Viktor' value="Viktor">Viktor</option>
+          <option id='Vladimir' value="Vladimir">Vladimir</option>
+          <option id='Volibear' value="Volibear">Volibear</option>
+          <option id='Warwick' value="Warwick">Warwick</option>
+          <option id='Wukong' value="Wukong">Wukong</option>
+          <option id='Xerath' value="Xerath">Xerath</option>
+          <option id='Xin Zhao' value="Xin Zhao">Xin Zhao</option>
+          <option id='Yasuo' value="Yasuo">Yasuo</option>
+          <option id='Yorick' value="Yorick">Yorick</option>
+          <option id='Zac' value="Zac">Zac</option>
+          <option id='Zed' value="Zed">Zed</option>
+          <option id='Ziggs' value="Ziggs">Ziggs</option>
+          <option id='Zilean' value="Zilean">Zilean</option>
+          <option id='Zyra' value="Zyra">Zyra</option>
+        </select>
+      </div>
 
+      <div class='champion-portrait column'>
+        <img src='http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/Annie.png'>
+      </div>
+
+      <div class='items column'>
+        <div class='group'>
+          <div class='heading'>5.11 Items</div>
+          <div class='items-before'></div>
+        </div>
+
+        <div class='group'>
+          <div class='heading'>5.14 Items</div>
+          <div class='items-after'></div>
+        </div>
+      </div>
+
+      <div class='diff column'>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+}
+
+.ap-items-viz {
+  color: #ededed;
+}
+
+svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #ededed;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #ededed;
+}
+
+.axis.hidden {
+  display: none;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.x-axis-images {
+  width: 44px;
+  height: 44px;
+}
+
+.legend text {
+  fill: #ededed;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<script src="/ripples/data/ripples.js" type="text/javascript"></script>
+<script src="/ripples/javascripts/apitems.js" type="text/javascript"></script>
+<script src="/ripples/javascripts/apchamps.js" type="text/javascript"></script>
+<script src="/ripples/javascripts/comparison.js" type="text/javascript"></script>
