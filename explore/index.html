@@ -1,0 +1,102 @@
+---
+layout: default
+---
+
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+}
+
+svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+path {
+  stroke: #fff;
+  fill-rule: evenodd;
+  cursor: pointer;
+}
+
+.tooltip.sunburst {
+  position: absolute;
+  text-align: center;
+  width: 80px;
+  padding: 4px;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: #ededed;
+  border: 1px solid #322f64;
+  background: #1C1953;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.tooltip.hidden {
+  display: none;
+}
+
+.tooltip.sunburst img {
+  width: 44px;
+  margin: 0 10px;
+}
+
+.tooltip.sunburst img.item {
+  width: 22px;
+  margin: 0 4px;
+}
+
+</style>
+
+<div class='data-wrapper'>
+  <h1 class='orange'>Explore</h1>
+
+  <div class='window'>
+    <h2>Click around on the plot below to see data! Go go go!</h2>
+  </div>
+
+  <div class='controls-container'>
+    <div class='row'>
+      <div class='dropdown green'>
+        <select class='region'>
+          <option id='all' value="all" data-region='all' selected>ALL</option>
+          <option id='na' value="na" data-region='na'>NA</option>
+          <option id='euw' value="euw" data-region='euw'>EUW</option>
+          <option id='kr' value="kr" data-region='kr'>KR</option>
+        </select>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='dropdown blue'>
+        <select class='data'>
+          <option id='data1' value="511" data-data='511'>Patch 5.11</option>
+          <option id='data2' value="514" data-data='514' selected>Patch 5.14</option>
+        </select>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='dropdown violet'>
+        <select class='scale'>
+          <option id='count' value="count" data-slice='count' selected>Senate</option>
+          <option id='size' value="size" data-slice='size'>House</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class='data-vis'></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<script src="/ripples/data/ripples.js" type="text/javascript"></script>
+<script src="/ripples/javascripts/sunburst.js" type="text/javascript"></script>
