@@ -162,7 +162,9 @@
  * Page content
  */
 .page-content {
-    padding: $spacing-unit 0;
+    // padding: $spacing-unit 0;
+    min-height: 88%;
+    margin: 0 auto -6px;
 }
 
 .page-heading {

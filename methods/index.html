@@ -1,0 +1,73 @@
+---
+layout: default
+---
+
+<div class='static-wrapper'>
+  <h1 class='green'>Methods</h1>
+
+  <p>
+    Now that you've seen the ripples, you're probably wondering how it all works.  You've come to the right place.  Read on!
+  </p>
+
+  <h2>Data</h2>
+
+  <p>
+  Our dataset was seeded by the awesome API devs at Riot Games.  They provided sets of 10,000 match IDs for each region's Ranked and Normal queues for each patch.  We currently only use the Ranked information for the NA, EUW, and KR servers.  You can see what we started with at the <a class="green" href="https://developer.riotgames.com/discussion/announcements/show/2lxEyIcE">Riot Games API Challenge</a> announcement.
+  </p>
+
+  <p>
+  We wrote a simple script to request match information for each of the given matches from the Riot API.  We ended up with a giant, but well structured JSON file of the captured data.  We could then play with that data and reimport it to development databases on multiple computers without having to redownload it, keeping the API servers happy.
+  </p>
+
+  <h2>App</h2>
+
+  <p>
+  The heart of the project is a Ruby on Rails app.  Our giant JSON files get turned into database entries: one for each match and one for each participant in every match.  Each participant belongs_to a match, and we can leverage Rails' Associations to do stuff like this:
+  </p>
+
+  <pre>
+  participants = Participant.includes(:match)
+    .where(
+      matches: {
+        match_version: '5.14.0.329'
+      }
+    )
+    .references(:matches)
+  </pre>
+
+  <p>
+  Basically, the infrastructure made slicing and dicing the data a breeze.
+  </p>
+
+  <h2>Processing</h2>
+
+  <p>
+  The simplest way to expose interesting things in the data is to count and compare things like how often champions or items were used and how much they won.  This sort of information can be pretty interesting to start with and can be seen on our <a class="green" href="/ripples/">results</a> page.  But we want ripples and <a class="green" href="/ripples/explore/">prettier things than bar charts</a>, so that requires a little something extra.
+  </p>
+
+  <h2>Clustering</h2>
+
+  <p>
+  Our little something extra was clustering!  Clustering is one of many machine learning techniques -- a way of letting a computer figure out how a dataset is structured and find cool things.  It's used in everything from search engines to biology and is a great way of condensing a ton of pieces of information into something a person can interpret and understand.
+  </p>
+
+  <p>
+  There are a lot of different clustering algorithms out there.  Since we didn't know what the ripples we were looking for would be, we chose to use hierarchical agglomerative clustering to group champions by their builds.  HAC is an unstructured and deterministic technique -- it doesn't need to know anything about the data before it starts in order to always come to the mathematically optimal result.  The tradeoff is that it's a lot slower than other techniques, even using optimizations like priority queues.  Since there are only about 150 champions though, the difference isn't a big deal, especially since we don't need to update the results in real time.
+  </p>
+
+  <p>
+  <a class="green" href="https://github.com/maryschmidt/ripples/blob/master/app/models/concerns/clusterable.rb#L11">Our implementation of HAC</a> starts by building vector representations of champions from all of the participant data we have.  A champion vector is just a list of numbers.  Each number corresponds to the importance of a particular item to that champion.  The importance is determined by how many people who played that champion built that item.
+  </p>
+
+  <p>
+  The clustering algorithm takes all those champion vectors and put each of them in their own cluster.  It figures out which two are the most similar and combines them.  Then it does it again.  And again.  Until there are no more clusters that are anything like each other.  In the end, we can build a tree that represents the relative similarities of different champions and groups of champions.  We can back out the most significant items for each champion and cluster and turn it into something people can understand, rather than just a bunch of numbers.
+  </p>
+
+  <h2>Visualization</h2>
+
+  <p>
+  Any data processing is only as good as the insights you can glean from it.  Visualizing is one of the best ways to give people a window into the data.  Plus it's pretty.  We used the industry-standard <a class="green" href="https://github.com/mbostock/d3">D3 visualization library</a> to build our interactive Bar Charts and Sunburst.
+  </p>
+
+  <h2>Thanks for Reading!</h2>
+</div>

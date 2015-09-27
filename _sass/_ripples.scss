@@ -382,6 +382,8 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
   font-size: 0.65em;
   text-align: center;
   line-height: 1.25em;
+  margin: 4em auto;
+
   p {
     margin: 0 auto;
     padding: 1em 0;
@@ -476,7 +478,7 @@ body.high_voltage-pages .wrapper, body.welcome .wrapper {
 }
 
 img.penguin {
-  display: inline-block;
+  display: block;
   width: 250px;
-  margin: 12px auto;
+  margin: 0px auto 24px auto;
 }
