@@ -1,0 +1,151 @@
+$(document).ready(ApChamps());
+
+function ApChamps() {
+  var data = Ripples.apChamps();
+
+  var championImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/champion/";
+  var itemImage = "http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/";
+
+  var margin = {top: 40, right: 20, bottom: 70, left: 70},
+      width = 840 - margin.left - margin.right,
+      height = 420 - margin.top - margin.bottom;
+
+  var x0 = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .25);
+
+  var x1 = d3.scale.ordinal();
+
+  var y0 = d3.scale.linear()
+    .range([height, 0]);
+
+  var y1 = d3.scale.linear()
+    .range([height, 0]);
+
+  var color = d3.scale.ordinal()
+    .range(['#FA356F', '#1CC3EE']);
+
+  var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom")
+    .tickFormat('');
+
+  var y0Axis = d3.svg.axis()
+    .scale(y0)
+    .orient("left")
+    .tickFormat(d3.format(".2s"));
+
+  var y1Axis = d3.svg.axis()
+    .scale(y1)
+    .orient("left")
+    .tickFormat(d3.format("%"));
+
+  var svg = d3.select(".ap-champs-viz").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  x0.domain(data.map(function(d) { return d.name; }));
+  x1.domain(['first', 'second']).rangeRoundBands([0, x0.rangeBand()]);
+  y0.domain([0, d3.max(data, function(d) { return Math.max(d.count1, d.count2); })]);
+  y1.domain([0.4, 0.58]);
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  svg.append("g")
+    .attr("class", "y axis count")
+    .call(y0Axis)
+    .append("text")
+    .attr("y", -25)
+    .attr("dy", ".71em")
+    .attr("dx", ".71em")
+    .style("text-anchor", "middle")
+    .style("fill", "#ededed")
+    .text("Games Played");
+
+  svg.append("g")
+    .attr("class", "y axis rate hidden")
+    .call(y1Axis)
+    .append("text")
+    .attr("y", -25)
+    .attr("dy", ".71em")
+    .attr("dx", ".71em")
+    .style("text-anchor", "middle")
+    .style("fill", "#ededed")
+    .text("Winrate");
+
+  var champ = svg.selectAll(".champ")
+    .data(data)
+    .enter().append("g")
+    .attr("class", "g")
+    .attr("transform", function(d) { return "translate(" + x0(d.name) + ",0)"; });
+
+  champ.selectAll("rect")
+    .data(function(d) { return d.plotdata; })
+    .enter().append("rect")
+    .attr("width", x1.rangeBand())
+    .attr("x", function(d) { return x1(d.name); })
+    .attr("y", function(d) { return y0(d.cValue); })
+    .attr("height", function(d) { return height - y0(d.cValue); })
+    .style("fill", function(d) { return color(d.name); });
+
+  svg.select(".x.axis").selectAll("text").remove();
+
+  var ticks = svg.select(".x.axis").selectAll(".tick")
+    .data(data)
+    .append("svg:image")
+    .attr("xlink:href", function(d) { return championImage + d.image; })
+    .attr("width", 20)
+    .attr("height", 20)
+    .attr("x", -10)
+    .attr("y", function(d,i) { return (i % 2) ? 26 : 4; });
+
+  var ticklines = svg.select(".x.axis").selectAll(".tick line")
+    .attr("y2", function(d,i) { return (i % 2) ? (6 + 24) : 6; });
+
+  var legend = svg.selectAll(".legend")
+    .data(['Patch 5.11', 'Patch 5.14'])
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + (i * 20 - 30) + ")"; });
+
+  legend.append("rect")
+    .attr("x", width - 18)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", function(d) { return color(d == 'Patch 5.11' ? 'first' : 'second'); });
+
+  legend.append("text")
+    .attr("x", width - 24)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "end")
+    .text(function(d) { return d; });
+
+  $('select.scale.apChamps').on('input', function (e) { changeScaling(e.currentTarget.selectedOptions[0].dataset.slice); });
+
+  function changeScaling(sizing) {
+    if (sizing == "count") {
+      champ.selectAll("rect")
+        .transition()
+        .duration(500)
+        .attr("y", function(d) { return y0(d.cValue); })
+        .attr("height", function(d) { return height - y0(d.cValue); });
+
+      svg.select(".y.axis.count").classed("hidden", false);
+      svg.select(".y.axis.rate").classed("hidden", true);
+    } else {
+      champ.selectAll("rect")
+        .transition()
+        .duration(500)
+        .attr("y", function(d) { return y1(d.wValue); })
+        .attr("height", function(d) { return height - y1(d.wValue); });
+
+      svg.select(".y.axis.count").classed("hidden", true);
+      svg.select(".y.axis.rate").classed("hidden", false);
+    }
+  };
+}
