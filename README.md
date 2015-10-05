@@ -8,11 +8,11 @@ brought on champion builds by the AP Item changes.  But not just the AP item
 builders -- let's look at the Ripples of those changes and how they affect the
 rest of the LoL world.
 
-You can play with the app [here](http://riot-ripples.herokuapp.com/).
+You can play with the app [here](http://maryschmidt.github.io/ripples/).
 
 ## Methods
 
-*Note: You can read this [here](http://riot-ripples.herokuapp.com/pages/methods)*
+*Note: You can read this [here](http://maryschmidt.github.io/ripples/methods/)*
 
 ### Data
 
@@ -51,9 +51,9 @@ Basically, the infrastructure made slicing and dicing the data a breeze.
 The simplest way to expose interesting things in the data is to count and
 compare things like how often champions or items were used and how much they
 won.  This sort of information can be pretty interesting to start with and can
-be seen on our [results](http://riot-ripples.herokuapp.com/pages/results), page.
+be seen on our [results](http://maryschmidt.github.io/ripples/), page.
 But we want ripples and
-[prettier things than bar charts](http://riot-ripples.herokuapp.com/pages/explore),
+[prettier things than bar charts](http://maryschmidt.github.io/ripples/explore/),
 so that requires a little something extra.
 
 ### Clustering
