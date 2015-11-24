@@ -15,8 +15,8 @@ module Clusterable
       threshold = 0
 
       # Initialize arrays
-      c = Array.new(matrix.length) { Array.new(matrix.length) { Array.new(2, 0.0) } }
-      p = c
+      similarity_matrix = Array.new(matrix.length) { Array.new(matrix.length) { Array.new(2, 0.0) } }
+      p = similarity_matrix
       j = Array.new(matrix.length, 0.0)
       a = Array.new()
       clusters = Array.new(matrix.length) { Array.new() }
@@ -24,16 +24,16 @@ module Clusterable
       # Initial similarity matrix and cluster activity array
       matrix.each_with_index do |n, n_index|
         matrix.each_with_index do |i, i_index|
-          c[n_index][i_index][0] = dotproduct(n, i)
-          c[n_index][i_index][1] = i_index
+          similarity_matrix[n_index][i_index][0] = dotproduct(n, i)
+          similarity_matrix[n_index][i_index][1] = i_index
         end
         j[n_index] = 1
         clusters[n_index].push(n_index)
       end
 
       # Sort similarity matrix into priority queue
-      c.each_with_index do |c_n, index|
-        p[index] = c_n.sort { |x,y| y[0] <=> x[0] }
+      similarity_matrix.each_with_index do |ele, index|
+        p[index] = ele.sort { |x,y| y[0] <=> x[0] }
       end
 
       # Remove self similarities from priority queue
@@ -41,86 +41,24 @@ module Clusterable
         p_n.delete_if { |item| item[1] == index }
       end
 
-      # Main clustering loop
-      (j.length - 1 - k).times do |count|
-        #Find the clusters to merge
-        k_1 = 0
-        k_2 = 0
-        max_sim = 0
-        j.each_with_index do |active, index|
-          if active == 1
-            if p[index][0][0] > max_sim
-              k_1 = index
-              max_sim = p[index][0][0]
-            end
-          end
-        end
-        if max_sim <= threshold
-          break
-        end
-        k_2 = p[k_1][0][1]
-
-        # Record the merge
-        a.push([k_1, k_2, max_sim])
-        j[k_2] = 0
-        clusters[k_1].concat(clusters[k_2])
-        clusters[k_2] = nil
-
-        # Recalculate similarities as needed
-        p[k_1] = []
-
-        new_length = clusters[k_1].length
-        new_sum = Array.new(matrix[0].length, 0.0)
-        clusters[k_1].each do |row|
-          matrix[row].each_with_index do |ele, index|
-            new_sum[index] += ele
-          end
-        end
-
-        j.each_with_index do |active, index|
-          if active == 1 && index != k_1
-            p[index].delete_if {|item| item[1] == k_1 || item[1] == k_2 }
-
-            comp_length = clusters[index].length
-            comp_sum = Array.new(matrix[0].length, 0.0)
-            clusters[index].each do |row|
-                matrix[row].each_with_index do |ele, c_index|
-                  comp_sum[c_index] += ele
-                end
-            end
-
-            sum_length = new_length + comp_length
-            sum_vectors = Array.new(matrix[0].length, 0.0)
-            new_sum.each_with_index do |ele, s_index|
-              sum_vectors[s_index] = ele + comp_sum[s_index]
-            end
-
-            new_c = (1.0/(sum_length * (sum_length - 1))) * (dotproduct(sum_vectors, sum_vectors) - sum_length)
-
-            p[k_1].push([new_c, index])
-            p[index].push([new_c, k_1])
-            p[index].sort! { |x,y| y[0] <=> x[0] }
-          end
-        end
-
-        p[k_1].sort! { |x,y| y[0] <=> x[0] }
-      end
-
-      # Prep outputs
-      clusters.compact!
+      clusters = cluster_data(j, k, p).compact!
 
       seeds = Array.new(clusters.length) { Array.new(matrix[0].length, 0.0) }
+
       clusters.each_with_index do |cluster, index|
-        cluster.each do |note|
-          matrix[note].each_with_index do |ele, e|
+
+        cluster.each do |champion|
+          matrix[champion].each_with_index do |ele, e|
             seeds[index][e] += ele
           end
+
         end
+
         clen = cluster.length
         seeds[index].map! { |ele| ele/clen }
       end
 
-      [seeds, clusters, a]
+      return [seeds, clusters, a]
     end
 
     def dotproduct(vect1, vect2)
@@ -168,6 +106,74 @@ module Clusterable
 
       sum_vect
     end
+
+    def cluster_data(matrix, target_cluster_count, priority_queue)
+      # Main clustering loop
+      (matrix.length - 1 - target_cluster_count).times do |count|
+        #Find the clusters to merge
+        k_1 = 0
+        k_2 = 0
+        max_sim = 0
+        matrix.each_with_index do |active, index|
+          if active == 1
+            if priority_queue[index][0][0] > max_sim
+              k_1 = index
+              max_sim = priority_queue[index][0][0]
+            end
+          end
+        end
+        if max_sim <= threshold
+          break
+        end
+        k_2 = priority_queue[k_1][0][1]
+
+        # Record the merge
+        a.push([k_1, k_2, max_sim])
+        matrix[k_2] = 0
+        clusters[k_1].concat(clusters[k_2])
+        clusters[k_2] = nil
+
+        # Recalculate similarities as needed
+        priority_queue[k_1] = []
+
+        new_length = clusters[k_1].length
+        new_sum = Array.new(matrix[0].length, 0.0)
+        clusters[k_1].each do |row|
+          matrix[row].each_with_index do |ele, index|
+            new_sum[index] += ele
+          end
+        end
+
+        matrix.each_with_index do |active, index|
+          if active == 1 && index != k_1
+            priority_queue[index].delete_if {|item| item[1] == k_1 || item[1] == k_2 }
+
+            comp_length = clusters[index].length
+            comp_sum = Array.new(matrix[0].length, 0.0)
+            clusters[index].each do |row|
+                matrix[row].each_with_index do |ele, c_index|
+                  comp_sum[c_index] += ele
+                end
+            end
+
+            sum_length = new_length + comp_length
+            sum_vectors = Array.new(matrix[0].length, 0.0)
+            new_sum.each_with_index do |ele, s_index|
+              sum_vectors[s_index] = ele + comp_sum[s_index]
+            end
+
+            new_c = (1.0/(sum_length * (sum_length - 1))) * (dotproduct(sum_vectors, sum_vectors) - sum_length)
+
+            priority_queue[k_1].push([new_c, index])
+            priority_queue[index].push([new_c, k_1])
+            priority_queue[index].sort! { |x,y| y[0] <=> x[0] }
+          end
+        end
+
+        priority_queue[k_1].sort! { |x,y| y[0] <=> x[0] }
+      end
+    end
+
 
     def build_tree(ref_hash, label_hash, merge_list, threshold_interval)
       # Initialize tree hash
@@ -252,6 +258,7 @@ module Clusterable
       return tree_result
     end
 
+
     def label_from_vector(vect, ref_hash, label_count)
       # Protect the input vector
       vector = vect.dup
@@ -280,8 +287,6 @@ module Clusterable
       end
 
       [labels, label_images]
-
     end
-
   end
 end
