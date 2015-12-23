@@ -121,6 +121,7 @@ function Sunburst() {
           .attr("opacity", 0)
           .attr("d", arc)
           .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
+          .style("stroke", function(d) { return strokeColors((d.children ? d: d.parent).index); })
           .on("click", click)
           .on("mouseover", showTooltip)
           .on("mouseout", hideTooltip)
