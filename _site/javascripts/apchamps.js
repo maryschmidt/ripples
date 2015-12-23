@@ -22,7 +22,10 @@ function ApChamps() {
     .range([height, 0]);
 
   var color = d3.scale.ordinal()
-    .range(['#FA356F', '#1CC3EE']);
+    .range(['#1B6491', '#561694']);
+
+  var stroke = d3.scale.ordinal()
+    .range(['#1CC3EE', '#b73cfc']);
 
   var xAxis = d3.svg.axis()
     .scale(x0)
@@ -90,7 +93,8 @@ function ApChamps() {
     .attr("x", function(d) { return x1(d.name); })
     .attr("y", function(d) { return y0(d.cValue); })
     .attr("height", function(d) { return height - y0(d.cValue); })
-    .style("fill", function(d) { return color(d.name); });
+    .style("fill", function(d) { return color(d.name); })
+    .style("stroke", function(d) { return stroke(d.name); });
 
   svg.select(".x.axis").selectAll("text").remove();
 
@@ -116,6 +120,7 @@ function ApChamps() {
     .attr("x", width - 18)
     .attr("width", 18)
     .attr("height", 18)
+    .style("stroke", function(d) { return stroke(d == 'Patch 5.11' ? 'first' : 'second'); })
     .style("fill", function(d) { return color(d == 'Patch 5.11' ? 'first' : 'second'); });
 
   legend.append("text")

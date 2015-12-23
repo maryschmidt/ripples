@@ -40,7 +40,10 @@ function Sunburst() {
     .range([0, radius]);
 
   var color = d3.scale.ordinal()
-    .range(['#B01CEE', '#DFA4F8', '#1CC3EE', '#a4e7f8', '#1CEEB0', '#a4f8df', '#F6A110', '#fbd99f', '#EE1C5A', '#f8a4bd']);
+    .range(['#641AAC', '#9748e3', '#11b5e0', '#1CC3EE', '#0fc891', '#34f0b8', '#F6A110', '#f9be5a', '#8D1A62', '#ce268f']);
+
+  var strokeColors = d3.scale.ordinal()
+    .range(['#bd8aed', '#bd8aed', '#aae9f8', '#aae9f8', '#c2faea', '#c2faea', '#fee9d5', '#fee9d5', '#e15fb1', '#e15fb1']);
 
   var svg = d3.select(".data-vis").append("svg")
     .attr("width", width)
@@ -71,6 +74,9 @@ function Sunburst() {
     .attr("opacity", 0)
     .attr("d", arc)
     .style("fill", function(d) { return color((d.children ? d : d.parent).index); })
+    .style("stroke", function(d) { return strokeColors((d.children ? d: d.parent).index); })
+    // .style("stroke", "#1D1C4E")
+    // .style("stroke-width", 16)
     .on("click", click)
     .on("mouseover", showTooltip)
     .on("mouseout", hideTooltip)
